@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IRenderContext.h"
+#include "irendercontext.h"
 
 namespace punkyoi_api {
 

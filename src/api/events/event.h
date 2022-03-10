@@ -3,7 +3,7 @@
 #include <functional>
 #include <unordered_map>
 
-namespace punkyoi_api {
+namespace punkyoi_api::events {
 
 	enum class EventType {
 		None = 0,

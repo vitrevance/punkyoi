@@ -1,7 +1,7 @@
 #pragma once
 
 #include "vec2d.h"
-#include "IImage.h"
+#include "iimage.h"
 
 namespace punkyoi_api {
 

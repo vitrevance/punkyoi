@@ -1,5 +1,3 @@
-#pragma once
-
 #include "vec2d.h"
 #include <cmath>
 
