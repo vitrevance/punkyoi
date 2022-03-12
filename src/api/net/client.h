@@ -22,22 +22,12 @@ namespace punkyoi_api::net {
 
         bool connect(const std::string& host, const uint16_t port) {
             try {
-                asio::ip::tcp::socket tcpSocket(m_context);
-                asio::ip::tcp::endpoint localTCPEndpoint = tcpSocket.local_endpoint();
-                m_TCPconnection = std::make_unique<TCPConnection>(TCPConnection::Owner::CLIENT, m_context, std::move(tcpSocket), m_inMessagesTCP);
-                asio::ip::udp::endpoint localUDPEndpoint = utils::EndpointBuilder(m_context)
-                    .from(localTCPEndpoint)
-                    .setPort(localTCPEndpoint.port() + 1)
-                    .buildUDP();
-                m_UDPconnection = std::make_unique<UDPConnection>(UDPConnection::Owner::CLIENT, m_context, asio::ip::udp::socket(m_context, localUDPEndpoint), m_inMessagesUDP);
+                m_TCPconnection = std::make_unique<TCPConnection>(TCPConnection::Owner::CLIENT, m_context, asio::ip::tcp::socket(m_context), m_inMessagesTCP);                    
 
                 asio::ip::tcp::resolver tcpResolver(m_context);
-                asio::ip::udp::resolver udpResolver(m_context);
                 asio::ip::tcp::resolver::results_type tcpEndpoints = tcpResolver.resolve(host, std::to_string(port));
-                asio::ip::udp::resolver::results_type udpEndpoints = udpResolver.resolve(host, std::to_string(port  + 1));
 
-                m_TCPconnection->connectToServer(*tcpEndpoints);
-                m_UDPconnection->connectToServer(*udpEndpoints);
+                m_TCPconnection->connectToServer(tcpEndpoints);
 
                 m_thread = std::thread([this]() { m_context.run(); });
                 return true;
@@ -48,10 +38,6 @@ namespace punkyoi_api::net {
                     m_TCPconnection->disconnect();
                     m_TCPconnection.release();
                 }
-                if (m_UDPconnection) {
-                    m_UDPconnection->disconnect();
-                    m_UDPconnection.release();
-                }
             }
             return false;
         }
@@ -60,16 +46,12 @@ namespace punkyoi_api::net {
             if (m_TCPconnection) {
                 m_TCPconnection->disconnect();
             }
-            if (m_UDPconnection) {
-                m_UDPconnection->disconnect();
-            }
 
             m_context.stop();
             if (m_thread.joinable()) {
                 m_thread.join();
             }
             m_TCPconnection.release();
-            m_UDPconnection.release();
         }
 
         bool isConnected() {
@@ -85,28 +67,15 @@ namespace punkyoi_api::net {
             }
         }
 
-        void sendUDP(const Message& message) {
-            if (isConnected()) {
-                punkyoi_api::log::console() << "cl se" << punkyoi_api::log::endl;
-                m_UDPconnection->send(message);
-            }
-        }
-
         tsqueue<OwnedMessage<TCPConnection> >& TCPIncome() {
             return m_inMessagesTCP;
-        }
-
-        tsqueue<OwnedMessage<UDPConnection> >& UDPIncome() {
-            return m_inMessagesUDP;
         }
 
     protected:
         asio::io_context m_context;
         std::unique_ptr<TCPConnection> m_TCPconnection;
-        std::unique_ptr<UDPConnection> m_UDPconnection;
 
         std::thread m_thread;
         tsqueue<OwnedMessage<TCPConnection> > m_inMessagesTCP;
-        tsqueue<OwnedMessage<UDPConnection> > m_inMessagesUDP;
     };
 }
