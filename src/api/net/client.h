@@ -6,7 +6,8 @@
 #include "connection.h"
 #include <memory>
 #include <string>
-#include <iostream>
+#include <api/utils/logger.h>
+#include "utils.h"
 
 namespace punkyoi_api::net {
 
@@ -21,22 +22,28 @@ namespace punkyoi_api::net {
 
         bool connect(const std::string& host, const uint16_t port) {
             try {
-                m_TCPconnection = std::make_unique<TCPConnection>(TCPConnection::Owner::CLIENT, m_context, asio::ip::tcp::socket(m_context), m_inMessagesTCP);
-                m_UDPconnection = std::make_unique<UDPConnection>(UDPConnection::Owner::CLIENT, m_context, asio::ip::udp::socket(m_context), m_inMessagesUDP);
+                asio::ip::tcp::socket tcpSocket(m_context);
+                asio::ip::tcp::endpoint localTCPEndpoint = tcpSocket.local_endpoint();
+                m_TCPconnection = std::make_unique<TCPConnection>(TCPConnection::Owner::CLIENT, m_context, std::move(tcpSocket), m_inMessagesTCP);
+                asio::ip::udp::endpoint localUDPEndpoint = utils::EndpointBuilder(m_context)
+                    .from(localTCPEndpoint)
+                    .setPort(localTCPEndpoint.port() + 1)
+                    .buildUDP();
+                m_UDPconnection = std::make_unique<UDPConnection>(UDPConnection::Owner::CLIENT, m_context, asio::ip::udp::socket(m_context, localUDPEndpoint), m_inMessagesUDP);
 
                 asio::ip::tcp::resolver tcpResolver(m_context);
                 asio::ip::udp::resolver udpResolver(m_context);
                 asio::ip::tcp::resolver::results_type tcpEndpoints = tcpResolver.resolve(host, std::to_string(port));
-                asio::ip::udp::resolver::results_type udpEndpoints = udpResolver.resolve(host, std::to_string(port));
+                asio::ip::udp::resolver::results_type udpEndpoints = udpResolver.resolve(host, std::to_string(port  + 1));
 
-                m_TCPconnection->connectToServer(tcpEndpoints);
-                m_UDPconnection->connectToServer(udpEndpoints);
+                m_TCPconnection->connectToServer(*tcpEndpoints);
+                m_UDPconnection->connectToServer(*udpEndpoints);
 
                 m_thread = std::thread([this]() { m_context.run(); });
                 return true;
             }
             catch (const std::exception& e) {
-                std::cerr << "Client connection exception: " << e.what() << '\n';
+                std::cerr << "Client connection exception: " << e.what() << std::endl;
                 if (m_TCPconnection) {
                     m_TCPconnection->disconnect();
                     m_TCPconnection.release();
@@ -80,6 +87,7 @@ namespace punkyoi_api::net {
 
         void sendUDP(const Message& message) {
             if (isConnected()) {
+                punkyoi_api::log::console() << "cl se" << punkyoi_api::log::endl;
                 m_UDPconnection->send(message);
             }
         }

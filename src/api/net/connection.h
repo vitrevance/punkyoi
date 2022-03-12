@@ -2,7 +2,9 @@
 
 #include <asio.hpp>
 #include <asio/ip/tcp.hpp>
+#include <asio/ip/udp.hpp>
 #include <memory>
+#include <api/utils/logger.h>
 
 #include "tsqueue.h"
 #include "message.h"
@@ -29,6 +31,8 @@ namespace punkyoi_api::net {
             if (m_owner == Owner::SERVER) {
                 if (m_socket.is_open()) {
                     m_id = id;
+                    m_remote_endpoint = m_socket.remote_endpoint();
+                    punkyoi_api::log::console() << "Listening from " << m_remote_endpoint << " on " << m_socket.local_endpoint() << punkyoi_api::log::endl;
                     readHeader();
                 }
             }
@@ -36,10 +40,24 @@ namespace punkyoi_api::net {
 
         void connectToServer(const typename interface::resolver::results_type& endpoints) {
             if (m_owner == Owner::CLIENT) {
-                m_sender_endpoint = *endpoints;
+                m_remote_endpoint = *endpoints;
                 asio::async_connect(m_socket, endpoints,
                     [this](std::error_code ec, typename interface::endpoint endpoint) {
                         if (!ec) {
+                            readHeader();
+                        }
+                    }
+                );
+            }
+        }
+
+        void connectToServer(const typename interface::endpoint& endpoint) {
+            if (m_owner == Owner::CLIENT) {
+                m_remote_endpoint = endpoint;
+                m_socket.async_connect(endpoint,
+                    [this](std::error_code ec) {
+                        if (!ec) {
+                            punkyoi_api::log::console() << "Client UDP bound to " << m_socket.local_endpoint() << punkyoi_api::log::endl;
                             readHeader();
                         }
                     }
@@ -58,17 +76,24 @@ namespace punkyoi_api::net {
         void send(const Message& message) {
             asio::post(m_context, 
                 [this, message]() {
+                    std::cout << "snd ";
                     bool shouldWrite = m_outMessages.empty();
                     m_outMessages.push_back(message);
                     if (shouldWrite) {
+                        std::cout << "wr";
                         writeHeader();
                     }
+                    std::cout << std::endl;
                 }
             );
         }
 
         uint32_t getID() const {
             return m_id;
+        }
+
+        typename interface::socket& getSocket() {
+            return m_socket;
         }
 
     protected:
@@ -90,7 +115,7 @@ namespace punkyoi_api::net {
         Owner m_owner;
         uint32_t m_id;
         typename interface::socket m_socket;
-        typename interface::endpoint m_sender_endpoint;
+        typename interface::endpoint m_remote_endpoint;
         asio::io_context& m_context;
         tsqueue<Message> m_outMessages;
         tsqueue<OwnedMessage<Connection> >& m_inMessages;
@@ -119,42 +144,6 @@ namespace punkyoi_api::net {
     template<>
     void TCPConnection::readHeader() {
         asio::async_read(m_socket, asio::buffer(&m_inMessageDirty.header, sizeof(Message::Header)),
-            [this](std::error_code ec, std::size_t length) {
-                if (ec) {
-                    std::cout << "[" << m_id << "] read header fail\n";
-                    m_socket.close();
-                }
-                else {
-                    if (m_inMessageDirty.header.size > 0) {
-                        m_inMessageDirty.body.resize(m_inMessageDirty.header.size);
-                        readBody();
-                    }
-                    else {
-                        addToIncomeQueue();
-                    }
-                }
-            }
-        );
-    }
-
-    template<>
-    void UDPConnection::readBody() {
-        m_socket.async_receive_from(asio::buffer(m_inMessageDirty.body.data(), m_inMessageDirty.body.size()), m_sender_endpoint,
-            [this](std::error_code ec, std::size_t length) {
-                if (ec) {
-                    std::cout << "[" << m_id << "] read body fail\n";
-                    m_socket.close();
-                }
-                else {
-                    addToIncomeQueue();
-                }
-            }
-        );
-    }
-
-    template<>
-    void UDPConnection::readHeader() {
-        m_socket.async_receive_from(asio::buffer(&m_inMessageDirty.header, sizeof(Message::Header)), m_sender_endpoint,
             [this](std::error_code ec, std::size_t length) {
                 if (ec) {
                     std::cout << "[" << m_id << "] read header fail\n";
@@ -213,6 +202,52 @@ namespace punkyoi_api::net {
     }
 
     template<>
+    void UDPConnection::readBody() {
+        std::cout << "UDP body recv job" << std::endl;
+        m_socket.async_receive_from(asio::buffer(m_inMessageDirty.body.data(), m_inMessageDirty.body.size()), m_remote_endpoint,
+            [this](std::error_code ec, std::size_t length) {
+                if (ec) {
+                    std::cout << "[" << m_id << "] read body fail: " << length << "bytes\n"
+                    << m_remote_endpoint.address() << " " << m_remote_endpoint.port()
+                    << ec.message() << std::endl;
+                    //m_socket.close();
+                }
+                else {
+                    addToIncomeQueue();
+                }
+            }
+        );
+    }
+
+    template<>
+    void UDPConnection::readHeader() {
+        std::cout << "UDP header recv job" << std::endl;
+        m_socket.async_receive(asio::buffer(&m_inMessageDirty.header, sizeof(Message::Header)),
+            [this](std::error_code ec, std::size_t length) {
+                if (ec) {
+                    std::cout << "[" << m_id << "] read header fail: " << length << " bytes\n"
+                        << m_socket.remote_endpoint() << " " << (m_owner == Owner::SERVER)
+                        << ec.message() << std::endl;
+                    
+                    std::cout << "hd " << m_inMessageDirty.header.id << " " << m_inMessageDirty.header.size << std::endl;
+                    readHeader();
+                    //m_socket.close();
+                }
+                else {
+                    std::cout << "UDP received " << m_inMessageDirty.header.id << " " << m_inMessageDirty.header.size << std::endl;
+                    if (m_inMessageDirty.header.size > 0) {
+                        m_inMessageDirty.body.resize(m_inMessageDirty.header.size);
+                        readBody();
+                    }
+                    else {
+                        addToIncomeQueue();
+                    }
+                }
+            }
+        );
+    }
+
+    template<>
     void UDPConnection::writeHeader();
 
     template<>
@@ -220,7 +255,8 @@ namespace punkyoi_api::net {
 
     template<>
     void UDPConnection::writeHeader() {
-        m_socket.async_send_to(asio::buffer(&m_outMessages.front().header, sizeof(Message::Header)), m_sender_endpoint,
+        std::cout << "w " << m_socket.remote_endpoint() << std::endl;
+        m_socket.async_send_to(asio::buffer(&m_outMessages.front().header, sizeof(Message::Header)), m_socket.remote_endpoint(),
             [this](std::error_code ec, std::size_t length) {
                 if (!ec) {
                     if (m_outMessages.front().header.size > 0) {
@@ -233,19 +269,23 @@ namespace punkyoi_api::net {
                         }
                     }
                 }
+                else {
+                    m_outMessages.pop_front();
+                    std::cout << "UDP Write error: " << ec.message() << std::endl;
+                }
             }
         );
     }
 
     template<>
     void UDPConnection::writeBody() {
-        m_socket.async_send_to(asio::buffer(m_outMessages.front().body.data(), m_outMessages.front().body.size()), m_sender_endpoint,
+        m_socket.async_send_to(asio::buffer(m_outMessages.front().body.data(), m_outMessages.front().body.size()), m_socket.remote_endpoint(),
             [this](std::error_code ec, std::size_t length) {
+                m_outMessages.pop_front();
                 if (!ec) {
-                    m_outMessages.pop_front();
-                    if (!m_outMessages.empty()) {
-                        writeHeader();
-                    }
+                }
+                else {
+                    std::cout << "UDP Write body error: " << ec.message() << std::endl;
                 }
             }
         );
