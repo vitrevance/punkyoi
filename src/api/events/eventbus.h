@@ -55,7 +55,7 @@ namespace punkyoi_api::events {
                 }
             }
 
-            for (EventBus* it : m_subEventBuses) {
+            for (std::shared_ptr<EventBus> it : m_subEventBuses) {
                 it->postEvent(event);
             }
         }

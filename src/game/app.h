@@ -1,11 +1,10 @@
 #pragma once
 
+#include <game/core.h>
 #include <stdexcept>
-#include <memory>
+#include <game/platform/platform_factory.h>
 
-#include <api/utils/logger.h>
-
-namespace game {
+namespace punkyoi {
 
     using punkyoi_api::log;
 
@@ -20,22 +19,33 @@ namespace game {
 
         static Punkyoi& createPunkyoi() {
             if (s_instance) {
-                return *s_instance;
+                throw std::runtime_error("Create method is only for initial instantiation! Use getPunkyoi() instead!");
             }
             s_instance = std::unique_ptr<Punkyoi>(new Punkyoi());
             return *s_instance;
         }
 
-    public:
-        virtual ~Punkyoi() {
-            log::console() << "Punkyoi destroyed" << log::endl;
-        }
+    
         
     protected:
         Punkyoi() {
             log::console() << "Punkyoi created" << log::endl;
+            m_window = std::shared_ptr<punkyoi_api::IWindow>(
+                platform::Platform().createWindow(
+                    punkyoi::Window::getDefaultWindowProps(),
+                    m_eventBus)
+                );
         }
 
+        std::shared_ptr<punkyoi_api::IWindow> m_window;
+        std::shared_ptr<punkyoi_api::events::EventBus> m_eventBus;
+
+    public:
+        virtual ~Punkyoi() {
+            log::console() << "Punkyoi destroyed" << log::endl;
+        }
+
+    private:
         static std::unique_ptr<Punkyoi> s_instance;
     };
 

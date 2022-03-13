@@ -7,7 +7,7 @@ project "Punkyoi"
 	cppdialect "C++17"
 	targetdir "bin/%{cfg.buildcfg}"
 	includedirs { "lib/asio-1.22.0/include", "src" }
-	links { "pthread" }
+	links { "pthread", "glfw" }
 
 	files { "src/**.h", "src/**.cpp" }
 

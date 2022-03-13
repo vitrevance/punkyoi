@@ -1,6 +1,6 @@
 #include <game/app.h>
 
 int main() {
-    game::Punkyoi& theGame = game::Punkyoi::createPunkyoi();
+    punkyoi::Punkyoi& theGame = punkyoi::Punkyoi::createPunkyoi();
     return 0;
 }

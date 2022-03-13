@@ -16,12 +16,12 @@ namespace punkyoi_api::events {
 
 	enum EventCategory {
 		None                = 0,
-		CategoryApp         = BIT(0),
-		CategoryWindow      = BIT(1),
-		CategoryInput       = BIT(2),
-		CategoryKey         = BIT(3),
-		CategoryMouse       = BIT(4),
-		CategoryMouseButton = BIT(5)
+		CategoryApp         = 1 << 0,
+		CategoryWindow      = 1 << 1,
+		CategoryInput       = 1 << 2,
+		CategoryKey         = 1 << 3,
+		CategoryMouse       = 1 << 4,
+		CategoryMouseButton = 1 << 5
 	};
 
 	class Event {
@@ -47,7 +47,7 @@ namespace punkyoi_api::events {
 		bool m_isCancelable = false;
 	};
 
-#define EVENT_CLASS_TYPE(type) virtual EventType getEventType() const override { return type; } static EventType getStaticEventType() { return type; }
+#define EVENT_CLASS_TYPE(type) virtual punkyoi_api::events::EventType getEventType() const override { return type; } static punkyoi_api::events::EventType getStaticEventType() { return type; }
 #define EVENT_CLASS_CATEGORY(category) virtual int getEventCategories() const override { return category; }
 
 	template<typename T>
