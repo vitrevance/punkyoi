@@ -1,4 +1,5 @@
-#pragma once
+#ifndef P_UTILS
+#define P_UTILS
 
 #include <asio.hpp>
 #include <string>
@@ -49,3 +50,5 @@ namespace punkyoi_api::net {
         };
     };
 }
+
+#endif

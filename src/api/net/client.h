@@ -1,4 +1,5 @@
-#pragma once
+#ifndef P_CLIENT
+#define P_CLIENT
 
 #include "asio.hpp"
 #include "tsqueue.h"
@@ -13,63 +14,19 @@ namespace punkyoi_api::net {
 
     class Client {
     public:
-        Client() {
-        }
+        Client();
 
-        ~Client() {
-            disconnect();
-        }
+        ~Client();
 
-        bool connect(const std::string& host, const uint16_t port) {
-            try {
-                m_TCPconnection = std::make_unique<TCPConnection>(TCPConnection::Owner::CLIENT, m_context, asio::ip::tcp::socket(m_context), m_inMessagesTCP);                    
+        bool connect(const std::string& host, const uint16_t port);
 
-                asio::ip::tcp::resolver tcpResolver(m_context);
-                asio::ip::tcp::resolver::results_type tcpEndpoints = tcpResolver.resolve(host, std::to_string(port));
+        void disconnect();
 
-                m_TCPconnection->connectToServer(tcpEndpoints);
+        bool isConnected();
 
-                m_thread = std::thread([this]() { m_context.run(); });
-                return true;
-            }
-            catch (const std::exception& e) {
-                std::cerr << "Client connection exception: " << e.what() << std::endl;
-                if (m_TCPconnection) {
-                    m_TCPconnection->disconnect();
-                    m_TCPconnection.release();
-                }
-            }
-            return false;
-        }
+        void sendTCP(const Message& message);
 
-        void disconnect() {
-            if (m_TCPconnection) {
-                m_TCPconnection->disconnect();
-            }
-
-            m_context.stop();
-            if (m_thread.joinable()) {
-                m_thread.join();
-            }
-            m_TCPconnection.release();
-        }
-
-        bool isConnected() {
-            if (m_TCPconnection) {
-                return m_TCPconnection->isConnected();
-            }
-            return false;
-        }
-
-        void sendTCP(const Message& message) {
-            if (isConnected()) {
-                m_TCPconnection->send(message);
-            }
-        }
-
-        tsqueue<OwnedMessage<TCPConnection> >& TCPIncome() {
-            return m_inMessagesTCP;
-        }
+        tsqueue<OwnedMessage<TCPConnection> >& TCPIncome();
 
     protected:
         asio::io_context m_context;
@@ -79,3 +36,5 @@ namespace punkyoi_api::net {
         tsqueue<OwnedMessage<TCPConnection> > m_inMessagesTCP;
     };
 }
+
+#endif

@@ -46,6 +46,6 @@ namespace punkyoi {
 
         WindowProps m_windowProps;
     protected:
-        Window() {};
+        inline Window() {};
     };
 }

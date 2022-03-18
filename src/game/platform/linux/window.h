@@ -1,4 +1,5 @@
-#pragma once
+#ifndef P_PLATFORM_WINDOW
+#define P_PLATFORM_WINDOW
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -154,3 +155,5 @@ namespace punkyoi::platform::linux {
         }
     };
 }
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#include <core.h>
+
+#if (CURRENT_PLATFORM == PLATFORM_LINUX)
 
 #include <game/platform/linux/window.h>
 
@@ -143,3 +145,4 @@ namespace punkyoi::platform::linux {
         }
     }
 }
+#endif

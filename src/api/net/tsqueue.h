@@ -1,4 +1,5 @@
-#pragma once
+#ifndef P_TSQUEUE
+#define P_TSQUEUE
 
 #include <deque>
 #include <mutex>
@@ -74,3 +75,5 @@ namespace punkyoi_api {
         std::deque<T> m_deque;
     };
 }
+
+#endif

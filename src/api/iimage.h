@@ -1,4 +1,5 @@
-#pragma once
+#ifndef P_IIMAGE
+#define P_IIMAGE
 
 namespace punkyoi_api {
     
@@ -12,3 +13,5 @@ namespace punkyoi_api {
         int height;
     };
 }
+
+#endif
