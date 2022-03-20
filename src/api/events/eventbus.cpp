@@ -19,11 +19,21 @@ namespace punkyoi_api::events {
         }
     }
 
+    void EventBus::subscribeEventListener(EventListenerBase* eventListener) {
+        std::shared_ptr<EventListenerBase> listenerPtr = std::shared_ptr<EventListenerBase>(eventListener, release_ptr<EventListenerBase*>);
+        subscribeEventListener(listenerPtr);
+    }
+
+    void EventBus::unsubscribeEventListener(EventListenerBase* eventListener) {
+        std::shared_ptr<EventListenerBase> listenerPtr = std::shared_ptr<EventListenerBase>(eventListener, release_ptr<EventListenerBase*>);
+        unsubscribeEventListener(listenerPtr);
+    }
+
     void EventBus::attachEventBus(const std::shared_ptr<EventBus>& subEventBus) {
-        m_subEventBuses.insert(subEventBus);
+        m_subEventBuses.push_back(subEventBus);
     }
 
     void EventBus::detachEventBus(const std::shared_ptr<EventBus>& subEventBus) {
-        m_subEventBuses.erase(subEventBus);
+        m_subEventBuses.remove(subEventBus);
     }
 }

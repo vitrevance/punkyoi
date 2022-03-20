@@ -1,6 +1,7 @@
 #pragma once
 
 #include <api/events/event.h>
+#include <api/irendercontext.h>
 
 namespace punkyoi::events {
 
@@ -10,7 +11,7 @@ namespace punkyoi::events {
 
     class KeyEvent : public Event {
 	public:
-		int getKeyCode() {
+		inline int getKeyCode() {
             return m_keyCode;
         }
 	protected:
@@ -27,7 +28,7 @@ namespace punkyoi::events {
 		KeyPressedEvent(int keyCode, int repeatCount) : KeyEvent(keyCode), m_repeatCount(repeatCount) {}
 		~KeyPressedEvent() {}
 
-		int getRepeatCount() {
+		inline int getRepeatCount() {
             return m_repeatCount;
         }
 		
@@ -50,8 +51,8 @@ namespace punkyoi::events {
 		WindowResizedEvent(int width, int height) : m_width(width), m_height(height) {}
 		~WindowResizedEvent() {}
 
-		int getWidth() { return m_width; }
-		int getHeight() { return m_height; }
+		inline int getWidth() { return m_width; }
+		inline int getHeight() { return m_height; }
 
 		EVENT_CLASS_CATEGORY(EventCategory::CategoryWindow)
 		EVENT_CLASS_TYPE(EventType::WindowResized)
@@ -65,8 +66,8 @@ namespace punkyoi::events {
 		WindowMovedEvent(int x, int y) : m_x(x), m_y(y) {}
 		~WindowMovedEvent() {}
 
-		int getX() { return m_x; }
-		int getY() { return m_y; }
+		inline int getX() { return m_x; }
+		inline int getY() { return m_y; }
 
 		EVENT_CLASS_CATEGORY(EventCategory::CategoryWindow)
 		EVENT_CLASS_TYPE(EventType::WindowMoved)
@@ -98,8 +99,8 @@ namespace punkyoi::events {
 		MouseMovedEvent(float x, float y) : m_mouseX(x), m_mouseY(y) {}
 		~MouseMovedEvent() {}
 
-		float getX() { return m_mouseX; }
-		float getY() { return m_mouseY; }
+		inline float getX() { return m_mouseX; }
+		inline float getY() { return m_mouseY; }
 
 		EVENT_CLASS_TYPE(EventType::MouseMoved)
 		EVENT_CLASS_CATEGORY(EventCategory::CategoryInput | EventCategory::CategoryMouse)
@@ -113,8 +114,8 @@ namespace punkyoi::events {
 		MouseScrolledEvent(float xOffset, float yOffset) : m_xOffset(xOffset), m_yOffset(yOffset) {}
 		~MouseScrolledEvent() {}
 
-		float getXOffset() { return m_xOffset; }
-		float getYOffset() { return m_yOffset; }
+		inline float getXOffset() { return m_xOffset; }
+		inline float getYOffset() { return m_yOffset; }
 
 		EVENT_CLASS_CATEGORY(EventCategory::CategoryInput | EventCategory::CategoryMouse)
 		EVENT_CLASS_TYPE(EventType::MouseScrolled);
@@ -124,7 +125,7 @@ namespace punkyoi::events {
 
 	class MouseButtonEvent : public Event {
 	public:
-		int getButton() { return m_button; }
+		inline int getButton() { return m_button; }
 
 		EVENT_CLASS_CATEGORY(EventCategory::CategoryInput | EventCategory::CategoryMouse | EventCategory::CategoryMouseButton);
 	protected:
@@ -148,5 +149,33 @@ namespace punkyoi::events {
 		~MouseButtonReleasedEvent() {}
 
 		EVENT_CLASS_TYPE(EventType::MouseButtonReleased);
+	};
+
+	class TickEvent : public Event {
+	public:
+		TickEvent(float deltaTime) : m_deltaTime(deltaTime) {}
+		~TickEvent() {}
+
+		inline float getDeltaTime() { return m_deltaTime; }
+
+		EVENT_CLASS_CATEGORY(EventCategory::CategoryApp)
+		EVENT_CLASS_TYPE(EventType::Tick)
+
+	protected:
+		float m_deltaTime;
+	};
+
+	class RenderEvent : public Event {
+	public:
+		RenderEvent(punkyoi_api::IRenderContext& ctx) : m_context(ctx) {}
+		~RenderEvent() {}
+
+		inline punkyoi_api::IRenderContext& getContext() { return m_context; }
+
+		EVENT_CLASS_CATEGORY(EventCategory::CategoryApp)
+		EVENT_CLASS_TYPE(EventType::Render)
+
+	protected:
+		punkyoi_api::IRenderContext& m_context;
 	};
 }
