@@ -137,7 +137,7 @@ namespace punkyoi::events {
 	class MouseButtonPressedEvent : public MouseButtonEvent {
 	public:
 		MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
-		~MouseButtonPressedEvent();
+		~MouseButtonPressedEvent() {}
 
 		EVENT_CLASS_TYPE(EventType::MouseButtonPressed);
 	};

@@ -1,4 +1,4 @@
-#include <core.h>
+#include <game/core.h>
 
 #if (CURRENT_PLATFORM == PLATFORM_LINUX)
 
@@ -8,7 +8,7 @@ namespace punkyoi::platform::linux {
 
     int LinuxWindow::s_isWindowInit = 0;
 
-    LinuxWindow::LinuxWindow(WindowProps windowProps, std::shared_ptr<punkyoi_api::events::EventBus> eventBus) {
+    LinuxWindow::LinuxWindow(punkyoi_api::WindowProps windowProps, std::shared_ptr<punkyoi_api::events::EventBus> eventBus) {
         m_windowProps = windowProps;
         m_eventBus = eventBus;
         init();
@@ -143,6 +143,22 @@ namespace punkyoi::platform::linux {
             punkyoi::events::MouseButtonReleasedEvent event(button);
             self->m_eventBus->postEvent(event);
         }
+    }
+
+    int LinuxWindow::getWidth() {
+        return m_windowProps.width;
+    }
+
+    int LinuxWindow::getHeight() {
+        return m_windowProps.height;
+    }
+
+    bool LinuxWindow::isVSync() {
+        return m_windowProps.isVSYNC;
+    }
+
+    bool LinuxWindow::isFullscreen() {
+        return m_windowProps.isFullscreen;
     }
 }
 #endif

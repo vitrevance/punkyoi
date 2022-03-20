@@ -33,12 +33,12 @@ namespace punkyoi_api::events {
         virtual int getEventCategories() const = 0;
         virtual bool isEventInCategory(EventCategory category);
 
-        inline bool isHandled() { return this->m_isHandled; }
-        inline bool isCanceled() { return this->m_isCanceled; }
-        inline bool isCancelable() { return this->m_isCancelable; }
+        bool isHandled();
+        bool isCanceled();
+        bool isCancelable();
 
-        inline bool setCanceled(bool state);
-        inline void setHandled();
+        bool setCanceled(bool state);
+        void setHandled();
     protected:
         bool m_isHandled = false;
         bool m_isCanceled = false;

@@ -1,8 +1,9 @@
-#pragma once
+#ifndef P_APP
+#define P_APP
 
 #include <game/core.h>
 #include <stdexcept>
-#include <game/platform/platform_factory.h>
+#include <game/platform/platform.h>
 
 namespace punkyoi {
 
@@ -32,7 +33,7 @@ namespace punkyoi {
             log::console() << "Punkyoi created" << log::endl;
             m_window = std::shared_ptr<punkyoi_api::IWindow>(
                 platform::Platform().createWindow(
-                    punkyoi::Window::getDefaultWindowProps(),
+                    punkyoi::platform::Platform().getDefaultWindowProps(),
                     m_eventBus)
                 );
         }
@@ -51,3 +52,5 @@ namespace punkyoi {
 
     std::unique_ptr<Punkyoi> Punkyoi::s_instance = nullptr;
 }
+
+#endif

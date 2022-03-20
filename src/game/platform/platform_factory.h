@@ -3,26 +3,16 @@
 
 #include <api/iwindow.h>
 #include <api/events/eventbus.h>
-#include <game/window.h>
-#include <core.h>
+#include <api/iwindow.h>
+#include <game/core.h>
 
 namespace punkyoi::platform {
 
-    class Platform {
+    class PlatformFactory {
     public:
-        virtual ::punkyoi_api::IWindow* createWindow(const ::punkyoi::WindowProps& properties, ::std::shared_ptr<::punkyoi_api::events::EventBus> eventBus);
+        virtual ::punkyoi_api::IWindow* createWindow(const ::punkyoi_api::WindowProps& properties, ::std::shared_ptr<::punkyoi_api::events::EventBus> eventBus) = 0;
+        virtual ::punkyoi_api::WindowProps getDefaultWindowProps() = 0;
     };
-
-    #if (CURRENT_PLATFORM == PLATFORM_LINUX)
-
-#include <game/platform/linux/window.h>
-
-    ::punkyoi_api::IWindow* Platform::createWindow(const ::punkyoi::WindowProps& properties, ::std::shared_ptr<::punkyoi_api::events::EventBus> eventBus) {
-        ::punkyoi::platform::linux::LinuxWindow* result = new ::punkyoi::platform::linux::LinuxWindow(properties, eventBus);
-        return dynamic_cast<::punkyoi_api::IWindow*>(result);
-    }
-
-    #endif
 }
 
 #endif
