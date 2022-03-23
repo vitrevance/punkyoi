@@ -11,6 +11,8 @@ namespace punkyoi_api {
     
     class IWindow {
     public:
+        virtual ~IWindow() = default;
+
         virtual int getWidth() = 0;
         virtual int getHeight() = 0;
 

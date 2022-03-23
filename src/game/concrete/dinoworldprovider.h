@@ -11,7 +11,7 @@ namespace punkyoi::concrete {
     class DinoWorldProvider : public ::punkyoi::common::IWorldProvider {
     public:
         DinoWorldProvider();
-        ~DinoWorldProvider();
+        virtual ~DinoWorldProvider();
 
         virtual void init() override;
         std::shared_ptr<::punkyoi::common::World> createWorld(punkyoi_api::events::EventBus&) override;

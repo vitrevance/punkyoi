@@ -2,6 +2,7 @@
 #define P_APP
 
 #include <game/core.h>
+#include <game/common/exception.h>
 #include <stdexcept>
 #include <game/platform/platform.h>
 #include <chrono>
@@ -16,14 +17,14 @@ namespace punkyoi {
     public:
         static Punkyoi& getPunkyoi() {
             if (!s_instance) {
-                throw std::runtime_error("Game instance must be initialized before any logic!");
+                throw common::exceptions::RuntimeException("Game instance must be initialized before any logic!");
             }
             return *s_instance;
         }
 
         static Punkyoi& createPunkyoi() {
             if (s_instance) {
-                throw std::runtime_error("Create method is only for initial instantiation! Use getPunkyoi() instead!");
+                throw common::exceptions::RuntimeException("Create method is only for initial instantiation! Use getPunkyoi() instead!");
             }
             s_instance = std::unique_ptr<Punkyoi>(new Punkyoi());
             return *s_instance;
@@ -38,11 +39,17 @@ namespace punkyoi {
             log::console() << "Punkyoi created" << log::endl;
             m_eventBus = std::make_shared<punkyoi_api::events::EventBus>();
             m_eventBus->subscribeEventListener(this);
+
+            m_assetManager = std::shared_ptr<punkyoi_api::IAssetManager>(platform::Platform().createAssetManager());
+            m_assetManager->loadAssetMap("assets/assets.json");
             m_window = std::shared_ptr<punkyoi_api::IWindow>(
                 platform::Platform().createWindow(
                     punkyoi::platform::Platform().getDefaultWindowProps(),
                     m_eventBus)
                 );
+            m_renderer = std::shared_ptr<punkyoi_api::IRenderer>(platform::Platform().createRenderer());
+            m_renderer->init(m_window.get());
+
             m_isRunning = true;
 
             std::shared_ptr<common::IWorldProvider> worldProvider = std::make_shared<concrete::DinoWorldProvider>();
@@ -56,13 +63,14 @@ namespace punkyoi {
             duration elapsed = clock::now() - start;
 
             while (m_isRunning) {
-                if (this->m_window != nullptr) {
-                    this->m_window->onUpdate();
-                    this->m_window->onRenderPre();
-                    //this->m_renderer->onRenderPre();
-                    //this->m_activeScene->render(this->m_renderer);
-                    //this->m_renderer->onRenderPost();
-                    this->m_window->onRenderPost();
+                if (m_window != nullptr) {
+                    m_window->onUpdate();
+                    m_window->onRenderPre();
+                    m_renderer->onRenderPre();
+                    events::RenderEvent renderEvent(*static_cast<punkyoi_api::IRenderContext*>(m_renderer.get()));
+                    m_eventBus->postEvent(renderEvent);
+                    m_renderer->onRenderPost();
+                    m_window->onRenderPost();
                 }
                 elapsed = clock::now() - start;
                 if (elapsed.count() > 1) {
@@ -71,9 +79,13 @@ namespace punkyoi {
                     start = clock::now();
                 }
             }
+
+            m_renderer->deinit();
         }
 
         std::shared_ptr<punkyoi_api::IWindow> m_window;
+        std::shared_ptr<punkyoi_api::IRenderer> m_renderer;
+        std::shared_ptr<punkyoi_api::IAssetManager> m_assetManager;
         std::shared_ptr<punkyoi_api::events::EventBus> m_eventBus;
         bool m_isRunning;
 

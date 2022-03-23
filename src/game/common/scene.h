@@ -17,7 +17,7 @@ namespace punkyoi::common {
         void close();
         virtual void load();
         virtual void unload();
-        virtual void addEntity(const std::shared_ptr<Entity>& entity);
+        virtual void addEntity(const object<Entity>& entity);
 
         virtual void onEvent(punkyoi::events::TickEvent& event) override;
 
@@ -26,7 +26,7 @@ namespace punkyoi::common {
     protected:
         bool m_isActive;
         std::shared_ptr<punkyoi_api::events::EventBus> m_eventBus;
-        std::list<std::shared_ptr<Entity> > m_entities;
+        std::list<object<Entity> > m_entities;
     };
 }
 

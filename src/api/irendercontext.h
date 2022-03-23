@@ -8,7 +8,7 @@ namespace punkyoi_api {
 
     class IRenderContext {
     public:
-        virtual ~IRenderContext() = 0;
+        virtual ~IRenderContext() = default;
 
         virtual void push() = 0;
         virtual void pop() = 0;

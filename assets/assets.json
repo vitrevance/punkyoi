@@ -1,0 +1,19 @@
+{
+    "path": "./",
+    "sprite": {
+      "player": {
+        "file": "sprites/player.png",
+        "type": "sprite"
+      },
+      "cacti": {
+        "file": "sprites/cacti.png",
+        "type": "sprite"
+      }
+    },
+    "sound": {
+      "hit": {
+        "file": "sounds/hit.wav",
+        "type": "sound"
+      }
+    }
+}

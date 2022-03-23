@@ -11,11 +11,11 @@
 
 namespace punkyoi::platform::linux {
 
-    class LinuxWindow : public ::punkyoi_api::IWindow {
+    class PlatformWindow : public ::punkyoi_api::IWindow {
     public:
-        LinuxWindow(::punkyoi_api::WindowProps windowProps, std::shared_ptr<punkyoi_api::events::EventBus> eventBus);
+        PlatformWindow(::punkyoi_api::WindowProps windowProps, std::shared_ptr<punkyoi_api::events::EventBus> eventBus);
 
-        virtual ~LinuxWindow();
+        virtual ~PlatformWindow();
 
         void onUpdate() override;
 

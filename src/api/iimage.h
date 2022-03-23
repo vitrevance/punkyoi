@@ -5,9 +5,9 @@ namespace punkyoi_api {
     
     class IImage {
     public:
-        virtual ~IImage() = 0;
+        virtual ~IImage() = default;
 
-        virtual char* getBuffer();
+        virtual uint8_t* getBuffer() = 0;
 
         int width;
         int height;

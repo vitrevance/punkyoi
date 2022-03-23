@@ -2,7 +2,7 @@
 
 namespace punkyoi::concrete {
 
-    EntityPlayer::EntityPlayer() {
+    EntityPlayer::EntityPlayer() : common::EntityBasicRenderable(vec2(1, 1), "texture_name") {
         log::console() << "creating entity player" << log::endl;
     }
     EntityPlayer::~EntityPlayer() {

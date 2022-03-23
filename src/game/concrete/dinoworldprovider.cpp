@@ -13,6 +13,13 @@ namespace punkyoi::concrete {
         std::shared_ptr<::punkyoi::common::World> world = std::make_shared<::punkyoi::common::World>(eventBus);
         log::console() << "Creating world" << log::endl;
 
+        std::shared_ptr<::punkyoi::common::Scene> scene = std::make_shared<::punkyoi::common::Scene>();
+        world->pushScene(scene);
+
+        object<EntityPlayer> player = new_instance<EntityPlayer>();
+
+        scene->addEntity(player);
+
         return world;
     }
 }
