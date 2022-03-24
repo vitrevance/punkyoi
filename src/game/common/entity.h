@@ -6,9 +6,11 @@
 
 namespace punkyoi::common {
 
+    class Scene;
+
     class Entity : public punkyoi_api::events::EventListener<punkyoi::events::TickEvent> {
     public:
-        Entity();
+        Entity(Scene&);
         virtual ~Entity();
 
         virtual void onDeath();
@@ -17,6 +19,7 @@ namespace punkyoi::common {
 
     protected:
         bool m_isDead;
+        Scene& m_scene;
     };
 }
 

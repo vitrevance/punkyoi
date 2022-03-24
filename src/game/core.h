@@ -11,7 +11,7 @@
 
 namespace punkyoi {
     using punkyoi_api::log;
-    using punkyoi_api::vec2;
+    using namespace ::punkyoi_api::math;
     using mat2 = punkyoi_api::mat<2, 2>;
     using mat3 = punkyoi_api::mat<3, 3>;
     using mat4 = punkyoi_api::mat<4, 4>;

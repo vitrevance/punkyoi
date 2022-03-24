@@ -12,8 +12,9 @@ namespace punkyoi::platform::linux {
     PlatformRenderer::~PlatformRenderer() {
     }
 
-    void PlatformRenderer::init(::punkyoi_api::IWindow*) {
+    void PlatformRenderer::init(::punkyoi_api::IWindow* window) {
         log::console() << "Initializing renderer" << log::endl;
+        m_window = window;
         // configure VAO/VBO
         unsigned int VBO;
         float vertices[] = { 
@@ -47,12 +48,11 @@ namespace punkyoi::platform::linux {
                 out vec2 TexCoords;
 
                 uniform mat4 model;
-                uniform mat4 projection;
 
                 void main()
                 {
-                    TexCoords = vertex.zw;
-                    gl_Position = projection * model * vec4(vertex.xy, 0.0, 1.0);
+                    TexCoords = vec2(vertex.z, 1.0 - vertex.w);
+                    gl_Position = model * vec4(vertex.xy, 0.0, 1.0);
                 }
             )",
             R"(
@@ -69,6 +69,11 @@ namespace punkyoi::platform::linux {
                 }
             )");
         glUseProgram(m_currentShader);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        m_windowRatio = vec2(1.0, float(m_window->getWidth()) / m_window->getHeight());
     }
 
     void PlatformRenderer::deinit() {
@@ -77,15 +82,86 @@ namespace punkyoi::platform::linux {
         glUseProgram(0);
     }
 
-    void PlatformRenderer::onRenderPre() {}
-    void PlatformRenderer::onRenderPost() {}
+    void PlatformRenderer::onRenderPre() {
+        if (m_windowRatio != vec2(1.0, float(m_window->getWidth()) / m_window->getHeight())) {
+            m_windowRatio = vec2(1.0, float(m_window->getWidth()) / m_window->getHeight());
+            glViewport(0, 0, m_window->getWidth(), m_window->getHeight());
+        }
+        m_matrices.push_back(mat4({ m_windowRatio.x, 0, 0, 0,
+                                    0, m_windowRatio.y, 0, 0,
+                                    0, 0, 1, 0,
+                                    0, 0, 0, 1}
+                                    ));
+    }
 
-    void PlatformRenderer::push() {}
-    void PlatformRenderer::pop() {}
-    void PlatformRenderer::translate(vec2 origin) {}
-    void PlatformRenderer::scale(vec2 scale) {}
-    void PlatformRenderer::rotate(float angle) {}
-    void PlatformRenderer::drawImage(const ::punkyoi_api::IImage& image) {}
+    void PlatformRenderer::onRenderPost() {
+        m_matrices.clear();
+    }
+
+    void PlatformRenderer::push() {
+        m_matrices.push_back(mat4({ 1, 0, 0, 0,
+                                    0, 1, 0, 0,
+                                    0, 0, 1, 0,
+                                    0, 0, 0, 1}
+                                    ));
+    }
+
+    void PlatformRenderer::pop() {
+        m_matrices.pop_back();
+    }
+
+    void PlatformRenderer::translate(vec2 origin) {
+        m_matrices.back()[3][0] += origin.x;
+        m_matrices.back()[3][1] += origin.y;
+    }
+
+    void PlatformRenderer::scale(vec2 scale) {
+        m_matrices.back()[0][0] *= scale.x;
+        m_matrices.back()[1][1] *= scale.y;
+    }
+
+    void PlatformRenderer::rotate(float angle) {
+    }
+
+    void PlatformRenderer::drawImage(::punkyoi_api::IImage& image) {
+        if (!m_texturesMap.count(image.getBuffer())) {
+            unsigned int id;
+            glGenTextures(1, &id);
+            glBindTexture(GL_TEXTURE_2D, id);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getBuffer());
+            // set Texture wrap and filter modes
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            // unbind texture
+            glBindTexture(GL_TEXTURE_2D, 0);
+            m_texturesMap[image.getBuffer()] = id;
+        }
+
+
+        unsigned int texture = m_texturesMap[image.getBuffer()];
+
+        mat4 model = mat4({ 1, 0, 0, 0,
+                            0, 1, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1});
+
+        for (mat4& it : m_matrices) {
+            model = it * model;
+        }
+
+        glUniformMatrix4fv(glGetUniformLocation(m_currentShader, "model"), 1, false, &(model)[0][0]);
+        glUniform3f(glGetUniformLocation(m_currentShader, "spriteColor"), 1, 1, 1);
+    
+        glActiveTexture(GL_TEXTURE0);
+        glUniform1i(glGetUniformLocation(m_currentShader, "texture"), 0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glBindVertexArray(m_quadVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
+    }
 
     PlatformRenderer::Shader PlatformRenderer::createShader(std::string vertexText, std::string fragmentText) {
         unsigned int vertexId = glCreateShader(GL_VERTEX_SHADER);

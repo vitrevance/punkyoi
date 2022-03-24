@@ -44,6 +44,9 @@ namespace punkyoi::common::exceptions {
 
     CLASS_BASIC_EXCEPTION(NoAssetException, "Asset with name <%> does not exist!")
     CLASS_BASIC_EXCEPTION(RuntimeException, "%")
+    CLASS_BASIC_EXCEPTION(BadAssetFormatException, "Bad asset format! %")
+    CLASS_BASIC_EXCEPTION(DuplicateAssetException, "Duplicate asset <%>")
+    CLASS_BASIC_EXCEPTION(MissingAssetFileException, "Missing asset file for <%>")
 }
 
 #endif

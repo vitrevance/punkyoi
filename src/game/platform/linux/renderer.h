@@ -2,6 +2,7 @@
 #define P_PLATFORM_RENDERER
 
 #include <game/core.h>
+#include <map>
 #include <api/irenderer.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -26,13 +27,17 @@ namespace punkyoi::platform::linux {
         virtual void translate(vec2 origin) override;
         virtual void scale(vec2 scale) override;
         virtual void rotate(float angle) override;
-        virtual void drawImage(const ::punkyoi_api::IImage& image) override;
+        virtual void drawImage(::punkyoi_api::IImage& image) override;
 
     protected:
         Shader createShader(std::string vertexText, std::string fragmentText);
 
+        ::punkyoi_api::IWindow* m_window;
         uint32_t m_quadVAO;
         Shader m_currentShader;
+        std::map<void*, unsigned int> m_texturesMap;
+        std::vector<mat4> m_matrices;
+        vec2 m_windowRatio;
     };
 }
 

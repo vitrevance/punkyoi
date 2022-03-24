@@ -8,9 +8,8 @@ namespace punkyoi_api {
         virtual ~IImage() = default;
 
         virtual uint8_t* getBuffer() = 0;
-
-        int width;
-        int height;
+        virtual int getWidth() = 0;
+        virtual int getHeight() = 0;
     };
 }
 

@@ -1,12 +1,22 @@
 {
-    "path": "./",
+    "path": "./assets/",
     "sprite": {
-      "player": {
-        "file": "sprites/player.png",
+      "player_idle": {
+        "file": "sprites/player_idle",
+        "type": "animation",
+        "frames": 6
+      },
+      "player_run": {
+        "file": "sprites/player_run",
+        "type": "animation",
+        "frames": 8
+      },
+      "block": {
+        "file": "sprites/block",
         "type": "sprite"
       },
-      "cacti": {
-        "file": "sprites/cacti.png",
+      "ground": {
+        "file": "sprites/ground",
         "type": "sprite"
       }
     },

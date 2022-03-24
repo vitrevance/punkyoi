@@ -16,7 +16,7 @@ namespace punkyoi_api {
         virtual ~IAssetManager() = default;
 
         virtual void loadAssetMap(const std::string&) = 0;
-        virtual const IAsset& getAsset(const std::string&) = 0;
+        virtual IAsset& getAsset(const std::string&) = 0;
     };
 }
 

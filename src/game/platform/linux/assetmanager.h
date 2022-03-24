@@ -7,6 +7,7 @@
 #include <game/common/exception.h>
 #include <fstream>
 #include <tao/json.hpp>
+#include <SOIL2.h>
 
 namespace punkyoi::platform::linux {
 
@@ -16,11 +17,18 @@ namespace punkyoi::platform::linux {
         virtual ~PlatformAssetManager();
 
         virtual void loadAssetMap(const std::string&) override;
-        virtual const ::punkyoi_api::IAsset& getAsset(const std::string&) override;
-        virtual const ::punkyoi::common::ImageAsset& getImage(const std::string&) override;
+        virtual ::punkyoi_api::IAsset& getAsset(const std::string&) override;
+        virtual ::punkyoi::common::ImageAsset& getImage(const std::string&) override;
 
     protected:
+        void processJson(const std::string& prefix, const tao::json::value& json);
+
         std::unordered_map<std::string, ::punkyoi_api::IAsset*> m_assetMap;
+        std::string m_root;
+    };
+
+    struct SpriteLoader {
+        static ::punkyoi::common::ImageAsset* load(const std::string&);
     };
 }
 

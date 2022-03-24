@@ -112,6 +112,8 @@ namespace punkyoi::platform::linux {
 
     void PlatformWindow::window_size_callback(GLFWwindow* window, int width, int height) {
         PlatformWindow* self = (PlatformWindow*)glfwGetWindowUserPointer(window);
+        self->m_windowProps.width = width;
+        self->m_windowProps.height = height;
         punkyoi::events::WindowResizedEvent event(width, height);
         self->m_eventBus->postEvent(event);
     }

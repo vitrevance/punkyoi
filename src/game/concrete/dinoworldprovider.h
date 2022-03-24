@@ -5,6 +5,7 @@
 #include <game/common/iworldprovider.h>
 #include <game/common/world.h>
 #include <game/concrete/entityplayer.h>
+#include <game/concrete/levelcontroller.h>
 
 namespace punkyoi::concrete {
 

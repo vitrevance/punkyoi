@@ -2,7 +2,7 @@
 
 namespace punkyoi::common {
 
-    Entity::Entity() : m_isDead(false) {}
+    Entity::Entity(Scene& scene) : m_isDead(false), m_scene(scene) {}
     Entity::~Entity() {}
 
     void Entity::onEvent(::punkyoi::events::TickEvent& event) {}

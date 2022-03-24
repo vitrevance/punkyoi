@@ -7,7 +7,7 @@
 
 namespace punkyoi::platform {
 
-    std::unique_ptr<PlatformFactory> instance = nullptr;
+    static std::unique_ptr<PlatformFactory> instance = nullptr;
 
     inline PlatformFactory& Platform() {
         if (instance.get() == nullptr) {

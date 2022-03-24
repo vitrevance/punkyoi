@@ -7,19 +7,24 @@
 
 namespace punkyoi::common {
 
-    class ImageAsset : public ::punkyoi_api::IAsset, ::punkyoi_api::IImage {
+    class ImageAsset : public ::punkyoi_api::IAsset, public ::punkyoi_api::IImage {
     public:
+        ImageAsset(int width, int height, uint8_t* buffer);
         virtual ~ImageAsset();
         virtual uint8_t* getBuffer() override;
+        virtual int getWidth() override;
+        virtual int getHeight() override;
 
     private:
         uint8_t* m_buffer = nullptr;
+        int m_width = 0;
+        int m_height = 0;
     };
 
     class AssetManager : public ::punkyoi_api::IAssetManager {
     public:
         virtual ~AssetManager() = default;
-        virtual const ImageAsset& getImage(const std::string&) = 0;
+        virtual ImageAsset& getImage(const std::string&) = 0;
         
     };
 }
