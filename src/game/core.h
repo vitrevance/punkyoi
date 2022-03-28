@@ -5,8 +5,9 @@
 #include <memory>
 #include <vector>
 #include <api/utils/logger.h>
-#include <api/vec2d.h>
-#include <api/matrix.h>
+#include <api/math/vec2d.h>
+#include <api/math/matrix.h>
+#include <api/math/utils.h>
 #include <api/object.h>
 
 namespace punkyoi {

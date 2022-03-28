@@ -39,6 +39,9 @@ namespace punkyoi_api::events {
             if (m_subscribedEventListeners.count(EventType::None)) {
                 std::set<void*>& callbacks = m_subscribedEventListeners[EventType::None];
                 for (void* it : callbacks) {
+                    if (event.isCanceled()) {
+                        break;
+                    }
                     std::function<void(Event&)> callback = *((onEventWrapper<Event>*)it);
                     callback(event);
                 }

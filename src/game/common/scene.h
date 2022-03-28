@@ -11,17 +11,17 @@ namespace punkyoi::common {
     class Scene : public punkyoi_api::events::EventListener<::punkyoi::events::TickEvent> {
     public:
         Scene();
-        ~Scene();
+        virtual ~Scene();
 
-        bool isActive();
-        void close();
+        virtual bool isActive();
+        virtual void close();
         virtual void load();
         virtual void unload();
         virtual void addEntity(const object<Entity>& entity);
 
         virtual void onEvent(::punkyoi::events::TickEvent& event) override;
 
-        std::shared_ptr<::punkyoi_api::events::EventBus>& getEventBus();
+        virtual std::shared_ptr<::punkyoi_api::events::EventBus>& getEventBus();
 
     protected:
         bool m_isActive;

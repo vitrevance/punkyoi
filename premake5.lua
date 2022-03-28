@@ -11,19 +11,6 @@ project "Punkyoi"
     links { "pthread", "glfw", "GL", "GLEW", "soil2" }
 
     files { "src/**.h", "src/**.cpp" }
-
-    filter "system:linux"
-        prebuildcommands {
-            --"mkdir -p %{_WORKING_DIR}/lib/SOIL2/lib/linux",
-            --"cp -f %{_WORKING_DIR}/lib/SOIL2/lib/linux/* %{_WORKING_DIR}/lib/SOIL2/lib/"
-        }
-
-    filter "system:windows"
-        prebuildcommands {
-            "mkdir -p %{_WORKING_DIR}/lib/SOIL2/lib/windows",
-            "copy -f %{_WORKING_DIR}/lib/SOIL2/lib/windows/", "%{_WORKING_DIR}/lib/SOIL2/lib/"
-        }
-
     
     filter "configurations:Debug"
         defines { "DEBUG" }

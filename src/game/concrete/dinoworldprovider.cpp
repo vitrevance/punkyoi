@@ -13,23 +13,10 @@ namespace punkyoi::concrete {
         std::shared_ptr<::punkyoi::common::World> world = std::make_shared<::punkyoi::common::World>(eventBus);
         log::console() << "Creating world" << log::endl;
 
-        std::shared_ptr<::punkyoi::common::Scene> background = std::make_shared<::punkyoi::common::Scene>();
-        world->pushScene(background);
+        std::shared_ptr<UIScreen> mainMenuScreen = std::make_shared<UIScreen>();
+        world->pushScene(mainMenuScreen);
 
-        std::shared_ptr<::punkyoi::common::Scene> scene = std::make_shared<::punkyoi::common::Scene>();
-        world->pushScene(scene);
-
-        object<EntityPlayer> player = new_instance<EntityPlayer>(*scene);
-        object<common::EntityBasicRenderable> other = new_instance<common::EntityBasicRenderable>(*scene, vec2(1, 1), "sprite.block");
-        scene->addEntity(player);
-        scene->addEntity(other);
-
-        object<LevelController> levelController = new_instance<LevelController>(*background);
-        background->addEntity(levelController);
-        levelController->setThePlayer(player);
-
-        object<common::EntityBasicRenderable> ground = new_instance<common::EntityBasicRenderable>(*scene, vec2(20, 4), "sprite.ground");
-        background->addEntity(ground);
+        mainMenuScreen->addEntity(new_instance<UIButton>(*mainMenuScreen, "sprite.block", "sprite.ground", vec2(0.5, 0), vec2(0.2, 0.2), []() { log::console() << "pressed!" << log::endl; }));
 
 
         return world;

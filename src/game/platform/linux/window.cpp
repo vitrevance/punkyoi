@@ -126,11 +126,17 @@ namespace punkyoi::platform::linux {
 
     void PlatformWindow::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
         PlatformWindow* self = (PlatformWindow*)glfwGetWindowUserPointer(window);
-        if (glfwGetInputMode(window, GLFW_CURSOR) != GLFW_CURSOR_NORMAL) {
+        if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
             int width, height;
             glfwGetWindowSize(window, &width, &height);
             glfwSetCursorPos(window, width / 2, height / 2);
             punkyoi::events::MouseMovedEvent event(xpos - width / 2, ypos - height / 2);
+            self->m_eventBus->postEvent(event);
+        }
+        else {
+            int width, height;
+            glfwGetWindowSize(window, &width, &height);
+            punkyoi::events::MouseMovedEvent event(float(xpos - width / 2) * 2 / width, -float(ypos - height / 2) * 2 / height);
             self->m_eventBus->postEvent(event);
         }
     }
