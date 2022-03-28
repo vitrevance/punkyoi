@@ -2,6 +2,7 @@
 
 #if (CURRENT_PLATFORM == PLATFORM_LINUX)
 
+#define STB_IMAGE_IMPLEMENTATION
 #include "assetmanager.h"
 
 namespace punkyoi::platform::linux {
@@ -89,8 +90,8 @@ namespace punkyoi::platform::linux {
     }
 
     ::punkyoi::common::ImageAsset* SpriteLoader::load(const std::string& source) {
-        int width, height;
-        uint8_t* data = SOIL_load_image(source.c_str(), &width, &height, 0, SOIL_LOAD_RGBA);
+        int width, height, channels;
+        uint8_t* data = stbi_load(source.c_str(), &width, &height, &channels, STBI_rgb_alpha);
         if (data == nullptr) {
             throw ::punkyoi::common::exceptions::MissingAssetFileException(source);
         }

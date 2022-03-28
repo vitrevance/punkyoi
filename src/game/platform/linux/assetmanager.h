@@ -7,7 +7,7 @@
 #include <game/common/exception.h>
 #include <fstream>
 #include <tao/json.hpp>
-#include <SOIL2.h>
+#include <stb_image.h>
 
 namespace punkyoi::platform::linux {
 

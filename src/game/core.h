@@ -33,8 +33,8 @@ namespace punkyoi_api::platform {
 #ifdef __linux
 static constexpr punkyoi_api::platform::PlatformType currentPlatform = punkyoi_api::platform::PlatformType::Linux;
 #define CURRENT_PLATFORM PLATFORM_LINUX
-#elif defined(WIN32)
-static constexpr Platform currentPlatform = Platform::Windows;
+#elif defined(__windows)
+static constexpr punkyoi_api::platform::PlatformType currentPlatform = punkyoi_api::platform::PlatformType::Windows;
 #define CURRENT_PLATFORM PLATFORM_WINDOWS
 #endif
 
