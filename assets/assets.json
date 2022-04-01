@@ -1,16 +1,6 @@
 {
     "path": "./assets/",
     "sprite": {
-      "player_idle": {
-        "file": "sprites/player_idle",
-        "type": "animation",
-        "frames": 6
-      },
-      "player_run": {
-        "file": "sprites/player_run",
-        "type": "animation",
-        "frames": 8
-      },
       "block": {
         "file": "sprites/block",
         "type": "sprite"
@@ -18,6 +8,35 @@
       "ground": {
         "file": "sprites/ground",
         "type": "sprite"
+      },
+      "dino": {
+        "file": "sprites/dino",
+        "type": "animation",
+        "frames": 6
+      },
+      "cacti_h": {
+        "file": "sprites/cacti_h",
+        "type": "sprite"
+      },
+      "cacti_m": {
+        "file": "sprites/cacti_m",
+        "type": "sprite"
+      },
+      "attrib_0": {
+        "file": "sprites/attrib_0",
+        "type": "sprite"
+      }
+    },
+    "ui": {
+      "button": {
+        "play": {
+          "file": "ui/button/play",
+          "type": "sprite"
+        },
+        "play_hover": {
+          "file": "ui/button/play_hover",
+          "type": "sprite"
+        }
       }
     },
     "sound": {

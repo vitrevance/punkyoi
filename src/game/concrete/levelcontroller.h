@@ -3,6 +3,8 @@
 
 #include <game/core.h>
 #include <game/concrete/entityplayer.h>
+#include <game/common/world.h>
+#include <game/concrete/uiscreen.h>
 
 namespace punkyoi::concrete {
 

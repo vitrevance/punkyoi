@@ -23,7 +23,9 @@ namespace punkyoi::common {
         return m_eventBus;
     }
 
-    void Scene::load() {}
+    void Scene::load(World&) {
+        m_isActive = true;
+    }
 
     void Scene::unload() {
         for (auto& entity : m_entities) {

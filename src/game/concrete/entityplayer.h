@@ -24,6 +24,27 @@ namespace punkyoi::concrete {
         vec2 m_velocity;
         float m_lifetime;
         int m_direction;
+        vec2 m_speed;
+        bool m_isJumping;
+    };
+
+    class EntityCacti : public ::punkyoi::common::EntityBasicRenderable {
+    public:
+        EntityCacti(::punkyoi::common::Scene&);
+        ~EntityCacti();
+        virtual void addAttribute(int attribute);
+        virtual ::punkyoi_api::IRenderBase& getRenderer() override;
+
+        friend class CactiRenderer;
+
+    protected:
+        int m_attribute = -1;
+    };
+
+    class CactiRenderer : public ::punkyoi_api::IRender<EntityCacti> {
+    public:
+        virtual ~CactiRenderer() = default;
+        virtual void render(EntityCacti&, ::punkyoi_api::IRenderContext&) override;
     };
 }
 

@@ -18,8 +18,8 @@ namespace punkyoi::common {
         virtual void onEvent(::punkyoi::events::RenderEvent&) override;
         virtual ::punkyoi_api::IRenderBase& getRenderer();
 
-        virtual vec2 getPosition();
-        virtual vec2 getScale();
+        virtual vec2& getPosition();
+        virtual vec2& getScale();
         virtual const std::string& getTexture();
         virtual int getTextureIndex();
         virtual int getTextureFrames();

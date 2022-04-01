@@ -30,6 +30,6 @@ namespace punkyoi::common {
     void World::pushScene(std::shared_ptr<Scene> scene) {
         m_scenes.push_back(scene);
         m_eventBus->attachEventBus(scene->getEventBus());
-        scene->load();
+        scene->load(*this);
     }
 }

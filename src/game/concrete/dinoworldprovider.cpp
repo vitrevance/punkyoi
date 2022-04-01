@@ -10,15 +10,36 @@ namespace punkyoi::concrete {
     void DinoWorldProvider::init() {}
 
     std::shared_ptr<::punkyoi::common::World> DinoWorldProvider::createWorld(punkyoi_api::events::EventBus& eventBus) {
-        std::shared_ptr<::punkyoi::common::World> world = std::make_shared<::punkyoi::common::World>(eventBus);
         log::console() << "Creating world" << log::endl;
+        std::shared_ptr<::punkyoi::common::World> world = std::make_shared<DinoWorld>(eventBus);
 
-        std::shared_ptr<UIScreen> mainMenuScreen = std::make_shared<UIScreen>();
-        world->pushScene(mainMenuScreen);
+        //MAIN MENU
+        //std::shared_ptr<MainMenu> mainMenuScreen = std::make_shared<MainMenu>();
+        //world->pushScene(mainMenuScreen);
+        //GAME ENV
+        /*
+        std::shared_ptr<::punkyoi::common::Scene> background = std::make_shared<::punkyoi::common::Scene>();
+        std::shared_ptr<::punkyoi::common::Scene> scene = std::make_shared<::punkyoi::common::Scene>();
+        world->pushScene(background);
+        world->pushScene(scene);
 
-        mainMenuScreen->addEntity(new_instance<UIButton>(*mainMenuScreen, "sprite.block", "sprite.ground", vec2(0.5, 0), vec2(0.2, 0.2), []() { log::console() << "pressed!" << log::endl; }));
 
 
+        object<LevelController> level = new_instance<LevelController>(*scene);
+        background->addEntity(level);
+
+        object<EntityPlayer> player = new_instance<EntityPlayer>(*scene);
+        level->setThePlayer(player);
+
+        scene->addEntity(player);
+
+        for (int i = 0; i < 100; ++i) {
+            object<EntityCacti> ent = new_instance<EntityCacti>(*scene);
+            ent->addAttribute(0);
+            ent->getPosition() = vec2(i * 10 + (rand() % 20 - 10), 0);
+            scene->addEntity(ent);
+        }
+        */
         return world;
     }
 }

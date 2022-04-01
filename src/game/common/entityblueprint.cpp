@@ -6,11 +6,11 @@ namespace punkyoi::common {
         : Entity(scene), m_size(size), m_textureName(name), m_textureFrames(frames), m_textureIndex(0) {
     }
 
-    vec2 EntityBasicRenderable::getPosition() {
+    vec2& EntityBasicRenderable::getPosition() {
         return m_position;
     }
 
-    vec2 EntityBasicRenderable::getScale() {
+    vec2& EntityBasicRenderable::getScale() {
         return m_size;
     }
 
@@ -40,7 +40,7 @@ namespace punkyoi::common {
     void EntityBasicRenderableRenderer::render(EntityBasicRenderable& target, ::punkyoi_api::IRenderContext& context) {
         context.push();
         context.scale(target.getScale());
-        context.translate(target.getPosition() - target.getScale() * 0.5);
+        context.translate(target.getPosition() + vec2(0, target.getScale().y / 2));
         std::string texture = target.getTexture();
         if (target.getTextureFrames() > 1) {
             texture += std::to_string(target.getTextureIndex() % target.getTextureFrames());

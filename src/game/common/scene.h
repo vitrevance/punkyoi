@@ -8,6 +8,8 @@
 
 namespace punkyoi::common {
 
+    class World;
+    
     class Scene : public punkyoi_api::events::EventListener<::punkyoi::events::TickEvent> {
     public:
         Scene();
@@ -15,7 +17,7 @@ namespace punkyoi::common {
 
         virtual bool isActive();
         virtual void close();
-        virtual void load();
+        virtual void load(World&);
         virtual void unload();
         virtual void addEntity(const object<Entity>& entity);
 

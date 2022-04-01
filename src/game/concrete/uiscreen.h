@@ -2,7 +2,7 @@
 #define P_UISCREEN
 
 #include <game/core.h>
-#include <game/common/scene.h>
+#include <game/common/world.h>
 #include <game/singleton.h>
 
 namespace punkyoi::concrete {
