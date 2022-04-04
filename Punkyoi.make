@@ -67,10 +67,6 @@ endif
 OBJECTS := \
 	$(OBJDIR)/event.o \
 	$(OBJDIR)/eventbus.o \
-	$(OBJDIR)/client.o \
-	$(OBJDIR)/connection.o \
-	$(OBJDIR)/message.o \
-	$(OBJDIR)/server.o \
 	$(OBJDIR)/logger.o \
 	$(OBJDIR)/vec2d.o \
 	$(OBJDIR)/entity.o \
@@ -144,18 +140,6 @@ $(OBJDIR)/event.o: src/api/events/event.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/eventbus.o: src/api/events/eventbus.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/client.o: src/api/net/client.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/connection.o: src/api/net/connection.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/message.o: src/api/net/message.cpp
-	@echo $(notdir $<)
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/server.o: src/api/net/server.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/logger.o: src/api/utils/logger.cpp
