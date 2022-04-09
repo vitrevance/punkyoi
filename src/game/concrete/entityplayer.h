@@ -3,6 +3,7 @@
 
 #include <game/core.h>
 #include <game/common/entityblueprint.h>
+#include <game/common/input.h>
 
 namespace punkyoi::concrete {
 
@@ -10,6 +11,7 @@ namespace punkyoi::concrete {
         public ::punkyoi_api::events::EventListener<::punkyoi::events::KeyPressedEvent>,
         public ::punkyoi_api::events::EventListener<::punkyoi::events::KeyReleasedEvent> {
     public:
+        using Input = ::punkyoi::common::Input;
         EntityPlayer(::punkyoi::common::Scene&);
         ~EntityPlayer();
 

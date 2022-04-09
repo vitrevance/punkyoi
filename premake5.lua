@@ -7,7 +7,7 @@ project "Punkyoi"
     language "C++"
     cppdialect "C++17"
     targetdir "bin/%{cfg.buildcfg}"
-    includedirs { "src", "lib/asio-1.22.0/include", "lib/stb-image", "lib/taojson/include", "lib/PEGTL/include" }
+    includedirs { "src", "lib/asio-1.22.0/include", "lib/stb-image", "lib/taojson/include", "lib/PEGTL/include", "lib/miniaudio" }
     libdirs { "lib/SOIL2/lib"}
     defines { "GLEW_STATIC" }
 

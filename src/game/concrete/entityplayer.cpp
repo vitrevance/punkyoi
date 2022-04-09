@@ -19,20 +19,24 @@ namespace punkyoi::concrete {
     }
 
     void EntityPlayer::onEvent(::punkyoi::events::KeyPressedEvent& event) {
-        if (event.getKeyCode() == 87 && m_position.y <= 0.1) {
+        if (event.getKeyCode() == Input::Jump && m_position.y <= 0.1) {
             m_isJumping = true;
             m_velocity.y = m_speed.y;
+        }
+        log::console() << "Key: " << event.getKeyCode() << log::endl;
+        if (event.getKeyCode() == Input::Crowl && m_position.y > 0.1) {
+            m_velocity.y = -m_speed.y;
         }
     }
 
     void EntityPlayer::onEvent(::punkyoi::events::KeyReleasedEvent& event) {
-        if (event.getKeyCode() == 87) {
+        if (event.getKeyCode() == Input::Jump) {
             m_isJumping = false;
         }
     }
 
     void EntityPlayer::onEvent(::punkyoi::events::TickEvent& event) {
-        m_speed.x = log2(m_position.x) / 2 + 1;
+        m_speed.x = log2(m_position.x) / 2 + 2;
         m_velocity.x = m_speed.x;
         if (m_isJumping && m_velocity.y > 0) {
             m_velocity.y += -30 * event.getDeltaTime();
