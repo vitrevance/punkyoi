@@ -22,7 +22,7 @@ project "Punkyoi"
         optimize "On"
 
     filter "system:windows"
-        defines { "__windows" }
+        defines { "__windows", "_WIN32_WINDOWS" }
         libdirs { "lib/win_precomp" }
         includedirs { "lib/win_precomp" }
         links { "opengl32", "glfw3", "glew32s" }
