@@ -14,18 +14,14 @@ namespace punkyoi::concrete {
         background->getPosition().y = -background->getScale().y / 2;
         addEntity(background);
         object<UIButton> playB = new_instance<UIButton>(*this, "ui.button.play", "ui.button.play_hover", vec2(0), vec2(0.35), [this]() {
-            this->m_pendingState = 1;
+            ::punkyoi::events::GameStateEvent event(1);
+            ::punkyoi::getEventBus().postEvent(event);
         });
         addEntity(playB);
     }
 
     void MainMenu::unload() {
         UIScreen::unload();
-        m_pendingState = 0;
-    }
-
-    size_t MainMenu::getState() {
-        return m_pendingState;
     }
 
     DinoLevel::DinoLevel() {
@@ -85,16 +81,16 @@ namespace punkyoi::concrete {
 
     void DinoWorld::onEvent(::punkyoi::events::TickEvent& event) {
         World::onEvent(event);
-        if (m_mainMenu->getState() == 1) {
-            m_mainMenu->close();
-            pushScene(m_level);
-        }
     }
 
     void DinoWorld::onEvent(::punkyoi::events::GameStateEvent& event) {
         if (event.getState() == 0 && m_level->isActive()) {
             m_level->close();
             pushScene(m_mainMenu);
+        }
+        if (event.getState() == 1 && m_mainMenu->isActive()) {
+            m_mainMenu->close();
+            pushScene(m_level);
         }
     }
 }

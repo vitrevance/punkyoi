@@ -7,8 +7,7 @@ project "Punkyoi"
     language "C++"
     cppdialect "C++17"
     targetdir "bin/%{cfg.buildcfg}"
-    includedirs { "src", "lib/asio-1.22.0/include", "lib/stb-image", "lib/taojson/include", "lib/PEGTL/include", "lib/miniaudio" }
-    libdirs { "lib/SOIL2/lib"}
+    includedirs { "src", "lib/stb-image", "lib/taojson/include", "lib/PEGTL/include", "lib/miniaudio" }
     defines { "GLEW_STATIC" }
 
     files { "src/**.h", "src/**.cpp" }
@@ -38,9 +37,6 @@ newaction {
         print("clean the build...")
         os.rmdir("./bin")
         os.rmdir("./obj")
-        os.rmdir("./lib/SOIL2/make")
-        os.rmdir("./lib/SOIL2/obj")
-        os.rmdir("./lib/SOIL2/lib")
         print("done.")
     end
 }
