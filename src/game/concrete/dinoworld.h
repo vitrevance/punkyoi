@@ -30,13 +30,14 @@ namespace punkyoi::concrete {
         virtual void unload() override;
     };
 
-    class DinoWorld : public ::punkyoi::common::World {
+    class DinoWorld : public ::punkyoi_api::events::EventListener<::punkyoi::events::GameStateEvent>, public ::punkyoi::common::World {
     public:
         DinoWorld(::punkyoi_api::events::EventBus&);
 
         virtual ~DinoWorld();
 
         virtual void onEvent(::punkyoi::events::TickEvent& event) override;
+        virtual void onEvent(::punkyoi::events::GameStateEvent& event) override;
 
     protected:
         std::shared_ptr<MainMenu> m_mainMenu;

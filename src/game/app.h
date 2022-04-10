@@ -23,6 +23,7 @@ namespace punkyoi {
         virtual void onEvent(events::WindowClosedEvent& event) override;
 
         ::punkyoi_api::IAssetManager& getAssetManager();
+        ::punkyoi_api::events::EventBus& getEventBus();
         
     protected:
         Punkyoi();

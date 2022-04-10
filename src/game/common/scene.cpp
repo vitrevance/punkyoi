@@ -4,6 +4,7 @@ namespace punkyoi::common {
 
     Scene::Scene() {
         m_eventBus = std::make_shared<punkyoi_api::events::EventBus>();
+        m_eventBus->subscribeEventListener(this);
         m_isActive = true;
     }
 
@@ -40,6 +41,12 @@ namespace punkyoi::common {
     }
 
     void Scene::onEvent(punkyoi::events::TickEvent& event) {
+        for (object<Entity>& entity : m_entities) {
+            if (entity->isDead()) {
+                entity->onDeath();
+                m_eventBus->unsubscribeEventListener(entity);
+            }
+        }
         m_entities.remove_if([](object<Entity>& entity) { return entity->isDead(); });
     }
 }

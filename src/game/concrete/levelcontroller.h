@@ -23,6 +23,8 @@ namespace punkyoi::concrete {
         std::vector<object<EntityPlayer> > m_players;
         object<EntityPlayer> m_thePlayer;
         vec2 m_cameraPosition;
+        size_t m_misc = 0;
+        ::punkyoi::common::Scene& m_scene;
     };
 }
 

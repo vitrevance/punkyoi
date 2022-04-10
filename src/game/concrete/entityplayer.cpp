@@ -18,12 +18,17 @@ namespace punkyoi::concrete {
         m_velocity = v;
     }
 
+    void EntityPlayer::onDeath() {
+        ::punkyoi::events::GameStateEvent event(0);
+        getEventBus().postEvent(event);
+    }
+
     void EntityPlayer::onEvent(::punkyoi::events::KeyPressedEvent& event) {
         if (event.getKeyCode() == Input::Jump && m_position.y <= 0.1) {
             m_isJumping = true;
             m_velocity.y = m_speed.y;
         }
-        log::console() << "Key: " << event.getKeyCode() << log::endl;
+        //log::console() << "Key: " << event.getKeyCode() << log::endl;
         if (event.getKeyCode() == Input::Crowl && m_position.y > 0.1) {
             m_velocity.y = -m_speed.y;
         }
@@ -74,6 +79,19 @@ namespace punkyoi::concrete {
         return renderer;
     }
 
+    void EntityCacti::watchPlayer(const object<EntityPlayer>& player) {
+        m_player = player;
+    }
+
+    void EntityCacti::onEvent(::punkyoi::events::TickEvent& event) {
+        if (!m_player) {
+            return;
+        }
+        if (AABB(m_player->getPosition(), vec2(m_player->getScale().x / 4, m_player->getScale().y)).contains(m_position + vec2(0, m_size.y * 0.4))) {
+            m_player->setDead(true);
+        }
+    }
+
     void CactiRenderer::render(EntityCacti& target, ::punkyoi_api::IRenderContext& context) {
         context.push();
 
@@ -96,5 +114,23 @@ namespace punkyoi::concrete {
         }
 
         context.pop();
+    }
+
+    EntityGround::EntityGround(::punkyoi::common::Scene& scene, object<EntityPlayer> player, int atlasSize) : ::punkyoi::common::EntityBasicRenderable(scene, vec2(6, 5), "sprite.ground", false) {
+        m_thePlayer = player;
+        m_atlasSize = atlasSize;
+    }
+    EntityGround::~EntityGround() {
+    }
+
+    void EntityGround::onEvent(::punkyoi::events::TickEvent& event) {
+        m_position.x += m_thePlayer->getVelocity().x * 0.9 * event.getDeltaTime();
+        if (m_position.x + m_size.x < m_thePlayer->getPosition().x) {
+            m_position.x += m_size.x * m_atlasSize;
+        }
+    }
+
+    void EntityMisc::onEvent(::punkyoi::events::TickEvent& event) {
+        m_callback(event, this);
     }
 }

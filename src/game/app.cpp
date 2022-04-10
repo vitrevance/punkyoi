@@ -82,7 +82,15 @@ namespace punkyoi {
         return *m_assetManager;
     }
 
+    ::punkyoi_api::events::EventBus& Punkyoi::getEventBus() {
+        return *m_eventBus;
+    }
+
     ::punkyoi_api::IAssetManager& getAssetManager() {
         return Punkyoi::getPunkyoi().getAssetManager();
+    }
+
+    ::punkyoi_api::events::EventBus& getEventBus() {
+        return Punkyoi::getPunkyoi().getEventBus();
     }
 }

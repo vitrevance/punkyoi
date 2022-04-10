@@ -9,6 +9,10 @@ namespace punkyoi::common {
 
     void Entity::onDeath() {}
 
+    void Entity::setDead(bool state) {
+        m_isDead = state;
+    }
+
     bool Entity::isDead() const {
         return m_isDead;
     }

@@ -14,6 +14,7 @@ namespace punkyoi::common {
         virtual ~Entity();
 
         virtual void onDeath();
+        virtual void setDead(bool);
         virtual bool isDead() const;
         virtual void onEvent(punkyoi::events::TickEvent&) override;
 
