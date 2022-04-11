@@ -15,9 +15,7 @@ namespace punkyoi::concrete {
 
         virtual void load(::punkyoi::common::World& world) override;
         virtual void unload() override;
-        virtual size_t getState();
     protected:
-        size_t m_pendingState;
         ::punkyoi::common::World* m_world;
     };
 
