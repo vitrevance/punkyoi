@@ -6,7 +6,7 @@ Punkyoi is a 2D runner game inspired by the Chrome's Dino game.
 - Pull to the ground - left shift
 
 ## Used patterns
-- Builder - IWorldProvider, EndpointBuilder
+- Builder - IWorldProvider
 - Factory - PlatformFactory
 - Singletone - Punkyoi
 - Observer - Entity, EventListener
