@@ -17,7 +17,9 @@ namespace punkyoi::common {
         virtual ~SoundEngine();
 
         virtual void playSound(punkyoi_api::ISound& sound, float volume) override;
-        virtual void playSound(const std::string& name, float volume);
+        virtual void playSound(const std::string& name, float volume, bool loop = false);
+        virtual bool isSoundPlaying(const std::string& name);
+        virtual void stopSound(const std::string& name);
 
     protected:
         AssetManager& m_assetManager;
