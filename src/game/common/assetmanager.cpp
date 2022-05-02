@@ -20,4 +20,15 @@ namespace punkyoi::common {
     int ImageAsset::getHeight() {
         return m_height;
     }
+
+    SoundAsset::SoundAsset(const std::string& path) : m_source(path) {
+    }
+
+    const std::string& SoundAsset::source() const {
+        return m_source;
+    }
+
+    void* SoundAsset::getBuffer() {
+        return nullptr;
+    }
 }

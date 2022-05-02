@@ -76,8 +76,8 @@
       }
     },
     "sound": {
-      "hit": {
-        "file": "sounds/hit.wav",
+      "jump": {
+        "file": "sounds/jump",
         "type": "sound"
       }
     }

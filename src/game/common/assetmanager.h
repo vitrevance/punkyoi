@@ -4,6 +4,7 @@
 #include <game/core.h>
 #include <api/iassetmanager.h>
 #include <api/iimage.h>
+#include <api/isound.h>
 
 namespace punkyoi::common {
 
@@ -21,10 +22,21 @@ namespace punkyoi::common {
         int m_height = 0;
     };
 
+    class SoundAsset : public ::punkyoi_api::IAsset, public ::punkyoi_api::ISound {
+    public:
+        SoundAsset(const std::string& path);
+        virtual ~SoundAsset() = default;
+        virtual void* getBuffer() override;
+        virtual const std::string& source() const override;
+    protected:
+        std::string m_source;
+    };
+
     class AssetManager : public ::punkyoi_api::IAssetManager {
     public:
         virtual ~AssetManager() = default;
         virtual ImageAsset& getImage(const std::string&) = 0;
+        virtual SoundAsset& getSound(const std::string&) = 0;
         
     };
 }
