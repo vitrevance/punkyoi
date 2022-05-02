@@ -32,7 +32,7 @@ namespace punkyoi::common {
         m_waste.push_back(sound);
     }
 
-    void SoundEngine::playSound(const std::string& name, float volume) {
+    void SoundEngine::playSound(const std::string& name, float volume, bool loop) {
         std::shared_ptr<ma_sound> sound;
         SoundAsset& asset = m_assetManager.getSound(name);
         if (!m_library.count(asset.uid)) {
@@ -43,13 +43,29 @@ namespace punkyoi::common {
                 throw exceptions::RuntimeException("Failed to load sound!");
             }
             m_waste.push_back(sound);
+            m_library[asset.uid] = sound;
         }
         else {
             sound = m_library[asset.uid];
             ma_sound_seek_to_pcm_frame(sound.get(), 0);
         }
-        
         ma_sound_set_volume(sound.get(), volume);
+        ma_sound_set_looping(sound.get(), loop);
         ma_sound_start(sound.get());
+    }
+
+    bool SoundEngine::isSoundPlaying(const std::string& name) {
+        SoundAsset& asset = m_assetManager.getSound(name);
+        if (!m_library.count(asset.uid)) {
+            return false;
+        }
+        return ma_sound_is_playing(m_library[asset.uid].get());
+    }
+
+    void SoundEngine::stopSound(const std::string& name) {
+        SoundAsset& asset = m_assetManager.getSound(name);
+        if (m_library.count(asset.uid)) {
+            ma_sound_stop(m_library[asset.uid].get());
+        }
     }
 }

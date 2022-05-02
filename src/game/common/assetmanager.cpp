@@ -1,5 +1,7 @@
 #include "assetmanager.h"
 
+uint32_t(::punkyoi_api::IAsset::gid) = 1;
+
 namespace punkyoi::common {
 
     ImageAsset::ImageAsset(int width, int height, uint8_t* buffer)
