@@ -16,9 +16,9 @@ Punkyoi is a 2D runner game inspired by the Chrome's Dino game.
 
 # UML Diagrams
 ## Basic
-![alt](ClassDiagram.png)
+![alt](ClassDiagram_stage_2.png)
 ## Extended
-![alt](ClassDiagramFull.png)
+![alt](ClassDiagramFull_stage_2.png)
 
 ## Class interaction
 ![alt](InteractionDiagram.png)
