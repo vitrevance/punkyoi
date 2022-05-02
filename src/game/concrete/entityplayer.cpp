@@ -27,9 +27,7 @@ namespace punkyoi::concrete {
         if (event.getKeyCode() == Input::Jump && m_position.y <= 0.1) {
             m_isJumping = true;
             m_velocity.y = m_speed.y;
-            log::console() << "playSound" << log::endl;
             getSoundEngine().playSound("sound.jump", 1);
-            log::console() << "playSound end" << log::endl;
         }
         //log::console() << "Key: " << event.getKeyCode() << log::endl;
         if (event.getKeyCode() == Input::Crowl && m_position.y > 0.1) {

@@ -22,8 +22,8 @@ namespace punkyoi::common {
     protected:
         AssetManager& m_assetManager;
         ma_engine m_engine;
-        std::map<uint32_t, ma_sound> m_library;
-        std::vector<ma_sound> m_waste;
+        std::map<uint32_t, std::shared_ptr<ma_sound> > m_library;
+        std::vector<std::shared_ptr<ma_sound> > m_waste;
     };
 }
 
