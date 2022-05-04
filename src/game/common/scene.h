@@ -8,25 +8,27 @@
 
 namespace punkyoi::common {
 
-    class Scene : public punkyoi_api::events::EventListener<punkyoi::events::TickEvent> {
+    class World;
+    
+    class Scene : public punkyoi_api::events::EventListener<::punkyoi::events::TickEvent> {
     public:
         Scene();
-        ~Scene();
+        virtual ~Scene();
 
-        bool isActive();
-        void close();
-        virtual void load();
+        virtual bool isActive();
+        virtual void close();
+        virtual void load(World&);
         virtual void unload();
-        virtual void addEntity(const std::shared_ptr<Entity>& entity);
+        virtual void addEntity(const object<Entity>& entity);
 
-        virtual void onEvent(punkyoi::events::TickEvent& event) override;
+        virtual void onEvent(::punkyoi::events::TickEvent& event) override;
 
-        std::shared_ptr<punkyoi_api::events::EventBus>& getEventBus();
+        virtual std::shared_ptr<::punkyoi_api::events::EventBus>& getEventBus();
 
     protected:
         bool m_isActive;
-        std::shared_ptr<punkyoi_api::events::EventBus> m_eventBus;
-        std::list<std::shared_ptr<Entity> > m_entities;
+        std::shared_ptr<::punkyoi_api::events::EventBus> m_eventBus;
+        std::list<object<Entity> > m_entities;
     };
 }
 

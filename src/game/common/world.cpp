@@ -17,19 +17,20 @@ namespace punkyoi::common {
     }
 
     void World::onEvent(punkyoi::events::TickEvent& event) {
-        for (std::list<std::shared_ptr<Scene> >::iterator it = m_scenes.begin(); it != m_scenes.end(); ++it) {
+        for (std::list<std::shared_ptr<Scene> >::iterator it = m_scenes.begin(); it != m_scenes.end();) {
             if (!(*it)->isActive()) {
                 m_eventBus->detachEventBus((*it)->getEventBus());
                 (*it)->unload();
                 m_scenes.erase(it++);
-                --it;
+                continue;
             }
+            ++it;
         }
     }
 
-    void World::pushScene(std::shared_ptr<Scene>& scene) {
+    void World::pushScene(std::shared_ptr<Scene> scene) {
         m_scenes.push_back(scene);
         m_eventBus->attachEventBus(scene->getEventBus());
-        scene->load();
+        scene->load(*this);
     }
 }

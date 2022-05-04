@@ -16,7 +16,7 @@ namespace punkyoi::common {
         ~World();
 
         virtual void onEvent(punkyoi::events::TickEvent& event) override;
-        void pushScene(std::shared_ptr<Scene>& scene);
+        void pushScene(std::shared_ptr<Scene> scene);
 
     protected:
         std::list<std::shared_ptr<Scene> > m_scenes;

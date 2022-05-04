@@ -11,7 +11,7 @@ namespace punkyoi_api::events {
         WindowClosed, WindowResized, WindowLostFocus, WindowMoved,
         KeyPressed, KeyReleased,
         MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled,
-        Tick, Render,
+        Tick, Render, State,
         EVENTTYPE_ITEMS
     };
 

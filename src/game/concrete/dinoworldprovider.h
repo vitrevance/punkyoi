@@ -4,14 +4,14 @@
 #include <game/core.h>
 #include <game/common/iworldprovider.h>
 #include <game/common/world.h>
-#include <game/concrete/entityplayer.h>
+#include <game/concrete/dinoworld.h>
 
 namespace punkyoi::concrete {
 
     class DinoWorldProvider : public ::punkyoi::common::IWorldProvider {
     public:
         DinoWorldProvider();
-        ~DinoWorldProvider();
+        virtual ~DinoWorldProvider();
 
         virtual void init() override;
         std::shared_ptr<::punkyoi::common::World> createWorld(punkyoi_api::events::EventBus&) override;

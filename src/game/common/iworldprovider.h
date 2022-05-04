@@ -8,6 +8,7 @@ namespace punkyoi::common {
 
     class IWorldProvider {
     public:
+        virtual ~IWorldProvider() = default;
         virtual void init() = 0;
         virtual std::shared_ptr<World> createWorld(punkyoi_api::events::EventBus&) = 0;
     };

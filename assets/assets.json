@@ -1,0 +1,84 @@
+{
+    "path": "./assets/",
+    "sprite": {
+      "ground": {
+        "file": "sprites/ground",
+        "type": "sprite"
+      },
+      "dino": {
+        "file": "sprites/dino",
+        "type": "animation",
+        "frames": 6
+      },
+      "sun": {
+        "file": "sprites/sun",
+        "type": "sprite"
+      },
+      "sky": {
+        "file": "sprites/sky",
+        "type": "sprite"
+      },
+      "cacti_h": {
+        "file": "sprites/cacti_h",
+        "type": "sprite"
+      },
+      "cacti_m": {
+        "file": "sprites/cacti_m",
+        "type": "sprite"
+      },
+      "attrib_0": {
+        "file": "sprites/attrib_0",
+        "type": "sprite"
+      },
+      "misc_0": {
+        "file": "sprites/misc_0",
+        "type": "sprite"
+      },
+      "misc_1": {
+        "file": "sprites/misc_1",
+        "type": "sprite"
+      },
+      "misc_2": {
+        "file": "sprites/misc_2",
+        "type": "sprite"
+      },
+      "misc_3": {
+        "file": "sprites/misc_3",
+        "type": "sprite"
+      },
+      "misc_4": {
+        "file": "sprites/misc_4",
+        "type": "sprite"
+      },
+      "misc_5": {
+        "file": "sprites/misc_5",
+        "type": "sprite"
+      },
+      "misc_6": {
+        "file": "sprites/misc_6",
+        "type": "sprite"
+      }
+    },
+    "ui": {
+      "button": {
+        "play": {
+          "file": "ui/button/play",
+          "type": "sprite"
+        },
+        "play_hover": {
+          "file": "ui/button/play_hover",
+          "type": "sprite"
+        }
+      },
+      "main_menu": {
+        "file": "ui/main_menu",
+        "type": "sprite"
+      }
+    },
+    "sound": {
+      "hit": {
+        "file": "sounds/hit.wav",
+        "type": "sound"
+      }
+    }
+}

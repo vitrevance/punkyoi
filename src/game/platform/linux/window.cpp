@@ -6,37 +6,37 @@
 
 namespace punkyoi::platform::linux {
 
-    int LinuxWindow::s_isWindowInit = 0;
+    int PlatformWindow::s_isWindowInit = 0;
 
-    LinuxWindow::LinuxWindow(punkyoi_api::WindowProps windowProps, std::shared_ptr<punkyoi_api::events::EventBus> eventBus) {
+    PlatformWindow::PlatformWindow(punkyoi_api::WindowProps windowProps, std::shared_ptr<punkyoi_api::events::EventBus> eventBus) {
         m_windowProps = windowProps;
         m_eventBus = eventBus;
         init();
     }
 
-    LinuxWindow::~LinuxWindow() {
+    PlatformWindow::~PlatformWindow() {
         dispose();
     }
 
-    void LinuxWindow::setVSync(bool state) {
+    void PlatformWindow::setVSync(bool state) {
 
     }
 
-    void LinuxWindow::onUpdate() {
+    void PlatformWindow::onUpdate() {
         glfwPollEvents();
     }
 
-    void LinuxWindow::onRenderPre() {
+    void PlatformWindow::onRenderPre() {
         glClearColor(0.02, 0.02, 0.02, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void LinuxWindow::onRenderPost() {
+    void PlatformWindow::onRenderPost() {
         glfwSwapBuffers(m_glfwWindow);
     }
 
-    void LinuxWindow::init() {
-        if (LinuxWindow::s_isWindowInit <= 0) {
+    void PlatformWindow::init() {
+        if (PlatformWindow::s_isWindowInit <= 0) {
             if (glfwInit()) {
                 log::console() << "GLFW initialized" << log::endl;
             }
@@ -48,7 +48,7 @@ namespace punkyoi::platform::linux {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        LinuxWindow::s_isWindowInit++;
+        PlatformWindow::s_isWindowInit++;
         m_glfwWindow = glfwCreateWindow(m_windowProps.width, m_windowProps.height, m_windowProps.title.c_str(),
             m_windowProps.isFullscreen ? glfwGetPrimaryMonitor() : NULL, NULL);
         if (!m_glfwWindow) {
@@ -72,24 +72,24 @@ namespace punkyoi::platform::linux {
         glfwSetMouseButtonCallback(m_glfwWindow, mouse_button_callback);
     }
 
-    void LinuxWindow::dispose() {
-        LinuxWindow::s_isWindowInit--;
+    void PlatformWindow::dispose() {
+        PlatformWindow::s_isWindowInit--;
         glfwDestroyWindow(m_glfwWindow);
-        if (LinuxWindow::s_isWindowInit <= 0) {
+        if (PlatformWindow::s_isWindowInit <= 0) {
             glfwTerminate();
         }
     }
 
-    void LinuxWindow::grabMouse() {
+    void PlatformWindow::grabMouse() {
         glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 
-    void LinuxWindow::releaseMouse() {
+    void PlatformWindow::releaseMouse() {
         glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
-    void LinuxWindow::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-        LinuxWindow* self = (LinuxWindow*)glfwGetWindowUserPointer(window);
+    void PlatformWindow::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        PlatformWindow* self = (PlatformWindow*)glfwGetWindowUserPointer(window);
         if (action == GLFW_PRESS) {
             punkyoi::events::KeyPressedEvent event(key, 0);
             self->m_eventBus->postEvent(event);
@@ -104,37 +104,45 @@ namespace punkyoi::platform::linux {
         }
     }
 
-    void LinuxWindow::window_close_callback(GLFWwindow* window) {
-        LinuxWindow* self = (LinuxWindow*)glfwGetWindowUserPointer(window);
+    void PlatformWindow::window_close_callback(GLFWwindow* window) {
+        PlatformWindow* self = (PlatformWindow*)glfwGetWindowUserPointer(window);
         punkyoi::events::WindowClosedEvent event;
         self->m_eventBus->postEvent(event);
     }
 
-    void LinuxWindow::window_size_callback(GLFWwindow* window, int width, int height) {
-        LinuxWindow* self = (LinuxWindow*)glfwGetWindowUserPointer(window);
+    void PlatformWindow::window_size_callback(GLFWwindow* window, int width, int height) {
+        PlatformWindow* self = (PlatformWindow*)glfwGetWindowUserPointer(window);
+        self->m_windowProps.width = width;
+        self->m_windowProps.height = height;
         punkyoi::events::WindowResizedEvent event(width, height);
         self->m_eventBus->postEvent(event);
     }
 
-    void LinuxWindow::window_moved_callback(GLFWwindow* window, int x, int y) {
-        LinuxWindow* self = (LinuxWindow*)glfwGetWindowUserPointer(window);
+    void PlatformWindow::window_moved_callback(GLFWwindow* window, int x, int y) {
+        PlatformWindow* self = (PlatformWindow*)glfwGetWindowUserPointer(window);
         punkyoi::events::WindowMovedEvent event(x, y);
         self->m_eventBus->postEvent(event);
     }
 
-    void LinuxWindow::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-        LinuxWindow* self = (LinuxWindow*)glfwGetWindowUserPointer(window);
-        if (glfwGetInputMode(window, GLFW_CURSOR) != GLFW_CURSOR_NORMAL) {
+    void PlatformWindow::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+        PlatformWindow* self = (PlatformWindow*)glfwGetWindowUserPointer(window);
+        if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
             int width, height;
             glfwGetWindowSize(window, &width, &height);
             glfwSetCursorPos(window, width / 2, height / 2);
             punkyoi::events::MouseMovedEvent event(xpos - width / 2, ypos - height / 2);
             self->m_eventBus->postEvent(event);
         }
+        else {
+            int width, height;
+            glfwGetWindowSize(window, &width, &height);
+            punkyoi::events::MouseMovedEvent event(float(xpos - width / 2) * 2 / width, -float(ypos - height / 2) * 2 / height);
+            self->m_eventBus->postEvent(event);
+        }
     }
 
-    void LinuxWindow::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
-        LinuxWindow* self = (LinuxWindow*)glfwGetWindowUserPointer(window);
+    void PlatformWindow::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+        PlatformWindow* self = (PlatformWindow*)glfwGetWindowUserPointer(window);
         if (action == GLFW_PRESS) {
             punkyoi::events::MouseButtonPressedEvent event(button);
             self->m_eventBus->postEvent(event);
@@ -145,19 +153,19 @@ namespace punkyoi::platform::linux {
         }
     }
 
-    int LinuxWindow::getWidth() {
+    int PlatformWindow::getWidth() {
         return m_windowProps.width;
     }
 
-    int LinuxWindow::getHeight() {
+    int PlatformWindow::getHeight() {
         return m_windowProps.height;
     }
 
-    bool LinuxWindow::isVSync() {
+    bool PlatformWindow::isVSync() {
         return m_windowProps.isVSYNC;
     }
 
-    bool LinuxWindow::isFullscreen() {
+    bool PlatformWindow::isFullscreen() {
         return m_windowProps.isFullscreen;
     }
 }

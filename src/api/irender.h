@@ -5,13 +5,22 @@
 
 namespace punkyoi_api {
 
-    template<class RenderTarget>
-    class IRender {
+    class IRenderBase {
     public:
-        IRender(const IRenderContext& renderContext) = 0;
+        virtual ~IRenderBase() = default;
+        virtual void render(void*, IRenderContext&) = 0;
+    };
 
-        virtual void render(RenderTarget& target) = 0;
-        virtual IRenderContext& context() = 0;
+    template<class RenderTarget>
+    class IRender : public IRenderBase {
+    public:
+        virtual ~IRender() = default;
+        
+        virtual void render(void* ptr, IRenderContext& context) override {
+            render(*static_cast<RenderTarget*>(ptr), context);
+        }
+
+        virtual void render(RenderTarget&, IRenderContext&) = 0;
     };
 }
 

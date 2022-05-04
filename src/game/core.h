@@ -5,9 +5,19 @@
 #include <memory>
 #include <vector>
 #include <api/utils/logger.h>
+#include <api/math/vec2d.h>
+#include <api/math/matrix.h>
+#include <api/math/utils.h>
+#include <api/object.h>
 
 namespace punkyoi {
     using punkyoi_api::log;
+    using namespace ::punkyoi_api::math;
+    using mat2 = punkyoi_api::mat<2, 2>;
+    using mat3 = punkyoi_api::mat<3, 3>;
+    using mat4 = punkyoi_api::mat<4, 4>;
+    using punkyoi_api::object;
+    using punkyoi_api::new_instance;
 }
 
 #define PLATFORM_LINUX 0
@@ -23,8 +33,8 @@ namespace punkyoi_api::platform {
 #ifdef __linux
 static constexpr punkyoi_api::platform::PlatformType currentPlatform = punkyoi_api::platform::PlatformType::Linux;
 #define CURRENT_PLATFORM PLATFORM_LINUX
-#elif defined(WIN32)
-static constexpr Platform currentPlatform = Platform::Windows;
+#elif defined(__windows)
+static constexpr punkyoi_api::platform::PlatformType currentPlatform = punkyoi_api::platform::PlatformType::Windows;
 #define CURRENT_PLATFORM PLATFORM_WINDOWS
 #endif
 

@@ -7,7 +7,7 @@ namespace punkyoi_api::events {
         std::unordered_map<EventType, void*>& callbacks = eventListener->getEventType();
         std::unordered_map<EventType, void*>::iterator it = callbacks.begin();
         for (it = callbacks.begin(); it != callbacks.end(); it++) {
-            m_subscribedEventListeners[it->first].insert(it->second);
+            m_subscribedEventListeners[it->first].push_back(it->second);
         }
     }
 
@@ -15,7 +15,7 @@ namespace punkyoi_api::events {
         std::unordered_map<EventType, void*>& callbacks = eventListener->getEventType();
         std::unordered_map<EventType, void*>::iterator it = callbacks.begin();
         for (it = callbacks.begin(); it != callbacks.end(); it++) {
-            m_subscribedEventListeners[it->first].erase(it->second);
+            m_subscribedEventListeners[it->first].remove(it->second);
         }
     }
 

@@ -178,4 +178,17 @@ namespace punkyoi::events {
 	protected:
 		punkyoi_api::IRenderContext& m_context;
 	};
+
+	class GameStateEvent : public Event {
+	public:
+		GameStateEvent(int state) : m_state(state) {}
+		~GameStateEvent() {}
+
+		inline int getState() { return m_state; }
+
+		EVENT_CLASS_CATEGORY(EventCategory::CategoryApp)
+		EVENT_CLASS_TYPE(EventType::State)
+	protected:
+		int m_state;
+	};
 }

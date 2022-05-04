@@ -29,7 +29,7 @@ namespace punkyoi_api::events {
         template<typename T>
         void postEvent(T& event) {
             if (m_subscribedEventListeners.count(T::getStaticEventType())) {
-                std::set<void*>& callbacks = m_subscribedEventListeners[T::getStaticEventType()];
+                std::list<void*>& callbacks = m_subscribedEventListeners[T::getStaticEventType()];
                 for (void* it : callbacks) {
                     std::function<void(T&)> callback = *((onEventWrapper<T>*)it);
                     callback(event);
@@ -37,8 +37,11 @@ namespace punkyoi_api::events {
             }
 
             if (m_subscribedEventListeners.count(EventType::None)) {
-                std::set<void*>& callbacks = m_subscribedEventListeners[EventType::None];
+                std::list<void*>& callbacks = m_subscribedEventListeners[EventType::None];
                 for (void* it : callbacks) {
+                    if (event.isCanceled()) {
+                        break;
+                    }
                     std::function<void(Event&)> callback = *((onEventWrapper<Event>*)it);
                     callback(event);
                 }
@@ -54,7 +57,7 @@ namespace punkyoi_api::events {
         }
 
     private:
-        std::unordered_map<EventType, std::set<void*> > m_subscribedEventListeners;
+        std::unordered_map<EventType, std::list<void*> > m_subscribedEventListeners;
         std::list<std::shared_ptr<EventBus> > m_subEventBuses;
     };
 }

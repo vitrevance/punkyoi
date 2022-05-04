@@ -1,0 +1,7 @@
+obj
+bin
+Makefile
+Punkyoi.make
+.vs
+*.sln
+*vcxproj*

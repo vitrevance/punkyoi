@@ -9,12 +9,11 @@ fi
 echo "Building Release"
 echo "Fetching requirements"
 set echo off
-apt-get install premake -y -qq > /dev/null
 apt-get install libglew-dev -y -qq > /dev/null
 apt-get install libglfw3 -y -qq > /dev/null
 apt-get install libglfw3-dev -y -qq > /dev/null
 set echo on
 echo "Building"
-make config=release
+make config=release_x86_64
 make clean
 echo "Done"

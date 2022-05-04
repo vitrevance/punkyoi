@@ -7,7 +7,7 @@
 
 namespace punkyoi::platform {
 
-    std::unique_ptr<PlatformFactory> instance = nullptr;
+    static std::unique_ptr<PlatformFactory> instance = nullptr;
 
     inline PlatformFactory& Platform() {
         if (instance.get() == nullptr) {
@@ -21,11 +21,17 @@ namespace punkyoi::platform {
 
 #if (CURRENT_PLATFORM == PLATFORM_WINDOWS)
 
+#include <game/platform/windows/windows_factory.h>
+
 namespace punkyoi::platform {
 
-    PlatformFactory& Platform() {
-        std::static_assert(CURRENT_PLATFORM != PLATFORM_WINDOWS, "Windows is not supported yet!");
-        throw std::runtime_error("Windows is not supported yet!");
+    static std::unique_ptr<PlatformFactory> instance = nullptr;
+
+    inline PlatformFactory& Platform() {
+        if (instance.get() == nullptr) {
+            instance = std::make_unique<windows::WindowsFactory>();
+        }
+        return *instance;
     }
 }
 
