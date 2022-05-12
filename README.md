@@ -57,3 +57,5 @@ Supported platforms:
     ```console
     $ premake5 vs2022
     ```
+- ### Using installation wizard
+    Installation wizard at ./Punkyoi/Release/setup.exe. Runs as normal windows setup, requires Punkyoi.msi.

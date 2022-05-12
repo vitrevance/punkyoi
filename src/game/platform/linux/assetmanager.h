@@ -19,6 +19,7 @@ namespace punkyoi::platform::linux {
         virtual void loadAssetMap(const std::string&) override;
         virtual ::punkyoi_api::IAsset& getAsset(const std::string&) override;
         virtual ::punkyoi::common::ImageAsset& getImage(const std::string&) override;
+        virtual ::punkyoi::common::SoundAsset& getSound(const std::string&) override;
 
     protected:
         void processJson(const std::string& prefix, const tao::json::value& json);
@@ -29,6 +30,10 @@ namespace punkyoi::platform::linux {
 
     struct SpriteLoader {
         static ::punkyoi::common::ImageAsset* load(const std::string&);
+    };
+
+    struct SoundLoader {
+        static ::punkyoi::common::SoundAsset* load(const std::string&);
     };
 }
 

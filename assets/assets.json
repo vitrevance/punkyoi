@@ -76,8 +76,32 @@
       }
     },
     "sound": {
-      "hit": {
-        "file": "sounds/hit.wav",
+      "jump": {
+        "file": "sounds/jump",
+        "type": "sound"
+      },
+      "game_m": {
+        "file": "sounds/game_m",
+        "type": "sound"
+      },
+      "game_s": {
+        "file": "sounds/game_s",
+        "type": "sound"
+      },
+      "game_w": {
+        "file": "sounds/game_w",
+        "type": "sound"
+      },
+      "game_p": {
+        "file": "sounds/game_p",
+        "type": "sound"
+      },
+      "game_y": {
+        "file": "sounds/game_y",
+        "type": "sound"
+      },
+      "menu": {
+        "file": "sounds/menu",
         "type": "sound"
       }
     }

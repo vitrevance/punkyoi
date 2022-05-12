@@ -9,6 +9,7 @@
 #include <api/math/matrix.h>
 #include <api/math/utils.h>
 #include <api/object.h>
+#include <api/kit.h>
 
 namespace punkyoi {
     using punkyoi_api::log;

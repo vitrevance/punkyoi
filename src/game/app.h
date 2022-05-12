@@ -23,6 +23,7 @@ namespace punkyoi {
         virtual void onEvent(events::WindowClosedEvent& event) override;
 
         ::punkyoi_api::IAssetManager& getAssetManager();
+        ::punkyoi_api::ISoundEngine& getSoundEngine();
         ::punkyoi_api::events::EventBus& getEventBus();
         
     protected:
@@ -32,6 +33,7 @@ namespace punkyoi {
         std::shared_ptr<punkyoi_api::IRenderer> m_renderer;
         std::shared_ptr<punkyoi_api::IAssetManager> m_assetManager;
         std::shared_ptr<punkyoi_api::events::EventBus> m_eventBus;
+        std::shared_ptr<punkyoi_api::ISoundEngine> m_soundEngine;
         bool m_isRunning;
 
     public:

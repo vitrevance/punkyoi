@@ -1,13 +1,15 @@
 #ifndef P_SINGLETON
 #define P_SINGLETON
 
-#include <api/iassetmanager.h>
+#include <game/common/assetmanager.h>
+#include <game/common/soundengine.h>
 #include <api/events/eventbus.h>
 
 namespace punkyoi {
 
-    ::punkyoi_api::IAssetManager& getAssetManager();
+    common::AssetManager& getAssetManager();
     ::punkyoi_api::events::EventBus& getEventBus();
+    common::SoundEngine& getSoundEngine();
 }
 
 #endif

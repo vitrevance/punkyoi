@@ -18,10 +18,12 @@ namespace punkyoi::concrete {
             ::punkyoi::getEventBus().postEvent(event);
         });
         addEntity(playB);
+        getSoundEngine().playSound("sound.menu", 1, true);
     }
 
     void MainMenu::unload() {
         UIScreen::unload();
+        getSoundEngine().stopSound("sound.menu");
     }
 
     DinoLevel::DinoLevel() {
@@ -63,10 +65,21 @@ namespace punkyoi::concrete {
         }
 
         addEntity(player);
+
+        int i = rand() % 5;
+        char t = ::punkyoi_api::kit<char, 'w', 'p', 's', 'y', 'm'>()[i];
+        std::string name = "sound.game_";
+        name.push_back(t);
+        getSoundEngine().playSound(name, 1, true);
     }
 
     void DinoLevel::unload() {
         ::punkyoi::common::Scene::unload();
+        for (auto t : ::punkyoi_api::kit<char, 'w', 'p', 's', 'y', 'm'>()) {
+            std::string name = "sound.game_";
+            name.push_back(t);
+            getSoundEngine().stopSound(name);
+        }
     }
 
     DinoWorld::DinoWorld(punkyoi_api::events::EventBus& parentBus) : ::punkyoi::common::World(parentBus) {

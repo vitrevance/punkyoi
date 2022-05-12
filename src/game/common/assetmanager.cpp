@@ -1,5 +1,7 @@
 #include "assetmanager.h"
 
+uint32_t(::punkyoi_api::IAsset::gid) = 1;
+
 namespace punkyoi::common {
 
     ImageAsset::ImageAsset(int width, int height, uint8_t* buffer)
@@ -19,5 +21,16 @@ namespace punkyoi::common {
 
     int ImageAsset::getHeight() {
         return m_height;
+    }
+
+    SoundAsset::SoundAsset(const std::string& path) : m_source(path) {
+    }
+
+    const std::string& SoundAsset::source() const {
+        return m_source;
+    }
+
+    void* SoundAsset::getBuffer() {
+        return nullptr;
     }
 }

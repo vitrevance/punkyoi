@@ -40,6 +40,7 @@ namespace punkyoi {
             );
         m_renderer = std::shared_ptr<punkyoi_api::IRenderer>(platform::Platform().createRenderer());
         m_renderer->init(m_window.get());
+        m_soundEngine = std::make_shared<common::SoundEngine>(::punkyoi::getAssetManager());
 
         m_isRunning = true;
 
@@ -82,12 +83,20 @@ namespace punkyoi {
         return *m_assetManager;
     }
 
+    ::punkyoi_api::ISoundEngine& Punkyoi::getSoundEngine() {
+        return *m_soundEngine;
+    }
+
     ::punkyoi_api::events::EventBus& Punkyoi::getEventBus() {
         return *m_eventBus;
     }
 
-    ::punkyoi_api::IAssetManager& getAssetManager() {
-        return Punkyoi::getPunkyoi().getAssetManager();
+    common::AssetManager& getAssetManager() {
+        return dynamic_cast<common::AssetManager&>(Punkyoi::getPunkyoi().getAssetManager());
+    }
+
+    common::SoundEngine& getSoundEngine() {
+        return dynamic_cast<common::SoundEngine&>(Punkyoi::getPunkyoi().getSoundEngine());
     }
 
     ::punkyoi_api::events::EventBus& getEventBus() {

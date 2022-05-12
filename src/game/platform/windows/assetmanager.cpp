@@ -39,6 +39,10 @@ namespace punkyoi::platform::windows {
         return dynamic_cast<::punkyoi::common::ImageAsset&>(getAsset(key));
     }
 
+    ::punkyoi::common::SoundAsset& PlatformAssetManager::getSound(const std::string& key) {
+        return dynamic_cast<::punkyoi::common::SoundAsset&>(getAsset(key));
+    }
+
     void PlatformAssetManager::processJson(const std::string& prefix, const tao::json::value& json) {
         std::string file;
         std::string type;
@@ -87,6 +91,9 @@ namespace punkyoi::platform::windows {
                 throw ::punkyoi::common::exceptions::MissingAssetFileException(source);
             }
         }
+        if (type == "sound") {
+            m_assetMap[prefix] = SoundLoader::load(m_root + file + ".wav");
+        }
     }
 
     ::punkyoi::common::ImageAsset* SpriteLoader::load(const std::string& source) {
@@ -97,6 +104,10 @@ namespace punkyoi::platform::windows {
         }
         ::punkyoi::common::ImageAsset* asset = new ::punkyoi::common::ImageAsset(width, height, data);
         return asset;
+    }
+
+    ::punkyoi::common::SoundAsset* SoundLoader::load(const std::string& source) {
+        return new ::punkyoi::common::SoundAsset(source);
     }
 }
 

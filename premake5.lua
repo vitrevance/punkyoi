@@ -28,7 +28,7 @@ project "Punkyoi"
 
     filter "system:linux"
         defines { "__linux" }
-        links { "pthread", "glfw", "GL", "GLEW" }
+        links { "pthread", "m", "dl", "glfw", "GL", "GLEW" }
 
 newaction {
     trigger     = "clean",
