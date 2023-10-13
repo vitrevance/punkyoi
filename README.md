@@ -24,38 +24,6 @@ Punkyoi is a 2D runner game inspired by the Chrome's Dino game.
 ![alt](InteractionDiagram.png)
 
 # Build instructions
-[Premake 5](https://premake.github.io/) is required to build Punkyoi.
-
-Supported platforms:
-- Linux (Ubuntu 20.04+)
-- Windows (Windows 10)
-
-## Linux
-- ### Manual with premake5
-    Using premake5 to generate Makefile
-
-    Dependencies:
-    ```console
-    $ apt-get install libglew-dev
-    $ apt-get install libglfw3
-    $ apt-get install libglfw3-dev
-    ```
-    Project
-    ```console
-    $ premake5 gmake
-    $ make config=release_x86_64
-    ```
-
-- ### Build script
-    ```console
-    $ ./build.sh
-    ```
-## Windows
-- ### Manual with premake5
-    Using premake5 to generate Visual Studio solution
-
-    ```console
-    $ premake5 vs2022
-    ```
-- ### Using installation wizard
+- CMake build target `punkyoiBundle`.
+- **Windows installation wizard:**
     Installation wizard at ./Punkyoi/Release/setup.exe. Runs as normal windows setup, requires Punkyoi.msi.

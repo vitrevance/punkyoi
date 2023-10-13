@@ -5,3 +5,4 @@ Punkyoi.make
 .vs
 *.sln
 *vcxproj*
+build
