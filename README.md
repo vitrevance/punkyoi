@@ -16,12 +16,14 @@ Punkyoi is a 2D runner game inspired by the Chrome's Dino game.
 
 # UML Diagrams
 ## Basic
-![alt](ClassDiagram.png)
+![alt](ClassDiagram_stage_2.png)
 ## Extended
-![alt](ClassDiagramFull.png)
+![alt](ClassDiagramFull_stage_2.png)
 
 ## Class interaction
 ![alt](InteractionDiagram.png)
 
-# Build
-Build target `punkyoiBundle` with CMake
+# Build instructions
+- CMake build target `punkyoiBundle`.
+- **Windows installation wizard:**
+    Installation wizard at ./Punkyoi/Release/setup.exe. Runs as normal windows setup, requires Punkyoi.msi.
