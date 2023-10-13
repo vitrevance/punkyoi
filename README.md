@@ -1,6 +1,7 @@
 # Punkyoi
-## The 2D game
 Punkyoi is a 2D runner game inspired by the Chrome's Dino game.
+
+![](docs/Screenshot.jpg)
 #### Controlls:
 - Jump - space
 - Pull to the ground - left shift
@@ -16,14 +17,14 @@ Punkyoi is a 2D runner game inspired by the Chrome's Dino game.
 
 # UML Diagrams
 ## Basic
-![alt](ClassDiagram_stage_2.png)
+![alt](docs/ClassDiagram_stage_2.png)
 ## Extended
-![alt](ClassDiagramFull_stage_2.png)
+![alt](docs/ClassDiagramFull_stage_2.png)
 
 ## Class interaction
-![alt](InteractionDiagram.png)
+![alt](docs/InteractionDiagram.png)
 
 # Build instructions
 - CMake build target `punkyoiBundle`.
 - **Windows installation wizard:**
-    Installation wizard at ./Punkyoi/Release/setup.exe. Runs as normal windows setup, requires Punkyoi.msi.
+    Installation wizard at [GitHub Releases](https://github.com/CreoDen-dev/punkyoi/releases/tag/v1.0.0). Runs as normal windows setup, requires Punkyoi.msi.
