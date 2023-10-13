@@ -6,3 +6,4 @@ Punkyoi.make
 *.sln
 *vcxproj*
 build
+.vscode
